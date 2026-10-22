@@ -1,0 +1,321 @@
+﻿@model PayrollSystem.Models.PaySlipViewModel
+
+@{
+    Layout = null;
+    var p = Model.PayrollRecord;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payslip</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #000;
+        }
+
+        /* =========================================
+                           PAYSLIP PAGE STYLING
+                        ========================================= */
+
+        .payslip-page {
+            page-break-after: always;
+            page-break-inside: avoid;
+            padding: 30px;
+            box-sizing: border-box;
+            background: white;
+            width: 95%;
+            max-width: 800px;
+            margin: 30px auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid #c8d8cc;
+        }
+
+            /* Suppress blank ending page in print/PDF output */
+            .payslip-page:last-child {
+                page-break-after: avoid;
+            }
+
+        h2, h3, h4 {
+            text-align: center;
+            margin: 5px 0;
+            color: #0b7a43;
+        }
+
+        hr {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 0;
+            border-top: 1px solid #dfeee4;
+        }
+
+        .info-section p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #c8d8cc;
+        }
+
+        th {
+            background-color: #0b7a43;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .summary th {
+            background-color: #198754;
+        }
+
+        .summary td {
+            font-weight: bold;
+        }
+
+        /* =========================================
+                           ACTION BAR
+                        ========================================= */
+
+        .action-bar {
+            margin: 25px auto;
+            width: 95%;
+            max-width: 800px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-print {
+            padding: 10px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #198754;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .btn-dashboard {
+            background-color: #5a6268;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+            .btn-dashboard:hover {
+                background-color: #3d4246;
+            }
+
+        /* =========================================
+                           FOOTER
+                        ========================================= */
+
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        @@media print {
+            .action-bar {
+                display: none !important;
+            }
+
+            .payslip-page {
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+                border: none;
+                background: white;
+            }
+
+            body {
+                margin: 0;
+                background-color: #fff;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ACTION BUTTONS (Hidden during Print rendering) -->
+    <div class="action-bar">
+        <button class="btn-print" onclick="window.print()">Print Payslip</button>
+
+        <a asp-controller="Account" asp-action="Dashboard" class="btn-dashboard">&larr; Back to Dashboard</a>
+    </div>
+
+    <!-- PAYSLIP CONTAINER -->
+    <div class="payslip-page">
+        <h2>UNIVERSITY OF BENIN TEACHING HOSPITAL</h2>
+        <h3>EMPLOYEE PAYSLIP</h3>
+        <h4>@p.PaymentMonth, @p.PaymentYear</h4>
+
+        <hr />
+
+        <div class="info-section">
+            <p><strong>EMPLOYEE NAME:</strong> @p.FullName</p>
+            <p><strong>GRADE LEVEL:</strong> @p.GradeLevel</p>
+            <p><strong>STAFF ID:</strong> @p.StaffID</p>
+            <p><strong>STAFF GROUP:</strong> @p.Staff_Group</p>
+        </div>
+
+        <hr />
+
+        <h3>BANK INFORMATION DETAILS</h3>
+        <div class="info-section">
+            <p><strong>BANK NAME:</strong> @p.Bank_Name</p>
+            <p><strong>BANK BRANCH:</strong> @p.Bank_Branch</p>
+            <p><strong>ACCOUNT NUMBER:</strong> @p.Account_Number</p>
+        </div>
+
+        <hr />
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 35%;">EARNINGS</th>
+                    <th style="width: 15%;">AMOUNT</th>
+                    <th style="width: 35%;">DEDUCTIONS</th>
+                    <th style="width: 15%;">AMOUNT</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var earnings = new List<(string Name, decimal Amount)>
+                                {
+                                ("CONSOLIDATED", p.Consolidated),
+                                ("ALLOWANCE", p.Allowance),
+                                ("TEACHING ALLOWANCE", p.TeachingAllowance),
+                                ("CALL DUTY ALLOWANCE", p.CallDutyAllowance),
+                                ("HAZARD ALLOWANCE", p.HazardAllowance),
+                                ("SHIFT ALLOWANCE", p.ShiftAllowance),
+                                ("SPECIALIST ALLOWANCE", p.SpecialistAllowance),
+                                ("RURAL POSTING ALLOWANCE", p.RuralPostingAllowance),
+                                ("ACCOUTREMENT ALLOWANCE", p.AccoutrementAllowance),
+                                ("CONMESS CLINICAL DUTY ALLOWANCE", p.ConmessClinicalDutyAllowance),
+                                ("CONMESS NON CLINICAL ALLOWANCE", p.ConmessNonClinicalAllowance),
+                                ("PHARMACIST CONSULT ALLOWANCE", p.PharmacistConsultAllowance),
+                                ("ARREARS", p.Arrears)
+                                }
+                    .Where(x => x.Amount > 0)
+                    .ToList();
+
+                    var deductions = new List<(string Name, decimal Amount)>
+                                {
+                                ("REFUND", p.Refund),
+                                ("OVER PAYMENT DEDUCTION", p.OverPaymentDeduction),
+                                ("PENSION", p.Pension),
+                                ("TAX", p.Tax),
+                                ("TAX ARREARS", p.TAX_ARREARS),
+                                ("AMLSN", p.AMLSN),
+                                ("NMA DUES", p.NMA_DUES),
+                                ("NMA SPECIAL LEVY", p.NMA_SPECIAL_LEVY),
+                                ("MEDCAN DUES", p.MEDCAN_DUES),
+                                ("ARD", p.ARD),
+                                ("NARD", p.NARD),
+                                ("RENT", p.RENT),
+                                ("RENT ARREARS", p.RENT_ARREARS)
+                                }
+                    .Where(x => x.Amount > 0)
+                    .ToList();
+
+                    int maxRows = Math.Max(earnings.Count, deductions.Count);
+                }
+
+                @for (int i = 0; i < maxRows; i++)
+                {
+                    <tr>
+                        <td>@(i<earnings.Count? earnings[i].Name : "")</td>
+                        <td class="text-right">@(i<earnings.Count? earnings[i].Amount.ToString("N2") : "")</td>
+                        <td>@(i<deductions.Count? deductions[i].Name : "")</td>
+                        <td class="text-right">@(i<deductions.Count? deductions[i].Amount.ToString("N2") : "")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <br />
+
+        <table class="summary">
+            <thead>
+                <tr>
+                    <th style="width: 70%;">SUMMARY OF PAYMENTS</th>
+                    <th style="width: 30%;">AMOUNT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GROSS EARNINGS</td>
+                    <td class="text-right">@p.Gross_Pay.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td>GROSS DEDUCTIONS</td>
+                    <td class="text-right">@p.Deductions.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td>NET EARNINGS</td>
+                    <td class="text-right">@p.Net_Pay.ToString("N2")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>
+
+---
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace PayrollSystem.Controllers
+{
+    public class PayslipController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+}

@@ -1,0 +1,263 @@
+﻿@model PayrollSystem.Models.Payroll
+
+@{
+    ViewData["Title"] = "Staff Payroll Information";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Staff Payroll Record</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   MAIN CONTENT
+                ========================================= */
+        .main-container {
+            width: 95%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        .record-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-top: 8px solid #0b7a43;
+        }
+
+        .title {
+            font-size: 26px;
+            color: #0b7a43;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            width: 35%;
+            background: #e2f3e7;
+            color: #0b7a43;
+            text-align: left;
+            padding: 12px 15px;
+            border: 1px solid #cde6d6;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 12px 15px;
+            border: 1px solid #cde6d6;
+            font-size: 14px;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background: #f9fffb;
+        }
+
+        .warning {
+            margin-top: 30px;
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-left: 6px solid orange;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .button-area {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .btn-delete {
+            background: #c82333;
+            color: white;
+        }
+
+            .btn-delete:hover {
+                background: #a71d2a;
+            }
+
+        .btn-close {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+
+            .btn-close:hover {
+                background: #4f565c;
+            }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+    <div class="main-container">
+        <div class="record-card">
+
+            <div class="title">
+                Staff Payroll Record
+            </div>
+
+            <table>
+                <tr>
+                    <th>Staff ID</th>
+                    <td>@Model.StaffID</td>
+                </tr>
+                <tr>
+                    <th>Employee Name</th>
+                    <td>@Model.FullName</td>
+                </tr>
+                <tr>
+                    <th>Staff Group</th>
+                    <td>@Model.Staff_Group</td>
+                </tr>
+                <tr>
+                    <th>Grade Level</th>
+                    <td>@Model.GradeLevel</td>
+                </tr>
+                <tr>
+                    <th>Bank</th>
+                    <td>@Model.Bank_Name</td>
+                </tr>
+                <tr>
+                    <th>Account Number</th>
+                    <td>@Model.Account_Number</td>
+                </tr>
+                <tr>
+                    <th>Payment Month</th>
+                    <td>@Model.PaymentMonth</td>
+                </tr>
+                <tr>
+                    <th>Payment Year</th>
+                    <td>@Model.PaymentYear</td>
+                </tr>
+                <tr>
+                    <th>Net Pay</th>
+                    <td>
+                        <strong>₦@Model.Net_Pay.ToString("N2")</strong>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="warning">
+                ⚠ You are about to remove this employee from the active Payroll.
+                The payroll record will be removed from the Payroll table.
+                This action can only be reversed by re-entering the record.
+            </div>
+
+            <form asp-action="DeactivateStaff"
+                  method="post"
+                  onsubmit="return confirm('Are you sure you want to delete this staff payroll record?');">
+
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="button-area">
+                    <button type="submit" class="btn btn-delete">
+                        Delete Staff Payroll
+                    </button>
+
+                    <a asp-action="Deactivate" class="btn btn-close">
+                        Back
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

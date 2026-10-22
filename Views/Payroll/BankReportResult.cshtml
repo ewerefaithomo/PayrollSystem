@@ -1,0 +1,320 @@
+﻿@model PayrollSystem.Models.BankReportViewModel
+
+@{
+    ViewData["Title"] = "Bank Payment Report Summary";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UBTH Payroll Portal - Bank Payment Summary</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f8f4;
+        }
+
+        /* =========================================
+                           HEADER
+                        ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                           MAIN CONTENT
+                        ========================================= */
+        .container {
+            padding: 35px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .report-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            border-top: 8px solid #0b7a43;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+            .report-header h2 {
+                color: #0b7a43;
+                margin: 0 0 5px 0;
+                font-size: 24px;
+                letter-spacing: 0.5px;
+            }
+
+            .report-header h3 {
+                color: #4b6354;
+                margin: 0;
+                font-size: 16px;
+                text-transform: uppercase;
+            }
+
+        .bank-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+            .bank-table th {
+                background-color: #0b7a43;
+                color: white;
+                font-weight: bold;
+                padding: 12px 10px;
+                border: 1px solid #095a31;
+                text-transform: uppercase;
+            }
+
+            .bank-table td {
+                padding: 10px;
+                border: 1px solid #cde6d6;
+                color: #333;
+            }
+
+            .bank-table tbody tr:nth-child(even) {
+                background-color: #f9fffb;
+            }
+
+            .bank-table tbody tr:hover {
+                background-color: #edfcf1;
+            }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #e2f3e7 !important;
+            border-top: 2px solid #0b7a43;
+        }
+
+            .total-row td {
+                color: #0b7a43;
+                border-bottom: 2px double #0b7a43;
+            }
+
+        .actions-panel {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+            border-top: 1px dashed #cde6d6;
+            padding-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-print {
+            background-color: #0b7a43;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+            .btn-print:hover {
+                background-color: #095a31;
+            }
+
+        .btn-excel {
+            background-color: #1e7145;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+            .btn-excel:hover {
+                background-color: #144b2e;
+            }
+
+        .btn-back {
+            background-color: #4b6354;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+            .btn-back:hover {
+                background-color: #35473c;
+            }
+
+        /* =========================================
+                           FOOTER
+                        ========================================= */
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        @@media print {
+            body {
+                background-color: white;
+            }
+
+            .header, .actions-panel, .footer {
+                display: none !important;
+            }
+
+            .container {
+                padding: 0;
+                max-width: 100%;
+            }
+
+            .report-card {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+
+            .bank-table th {
+                background-color: #d9d9d9 !important;
+                color: black !important;
+                border: 1px solid #000 !important;
+            }
+
+            .bank-table td {
+                border: 1px solid #000 !important;
+            }
+
+            .total-row {
+                background-color: #f2f2f2 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+    <div class="container">
+        <div class="report-card">
+
+            <div class="report-header">
+                <h2>UNIVERSITY OF BENIN TEACHING HOSPITAL</h2>
+                <h3>BANK PAYMENT SUMMARY FOR THE MONTH OF @Model.Month - @Model.Year</h3>
+            </div>
+
+            <table class="bank-table">
+                <thead>
+                    <tr>
+                        <th style="width: 8%;" class="text-center">S/N</th>
+                        <th style="width: 15%;" class="text-center">Bank Code</th>
+                        <th>Bank Name</th>
+                        <th>Branch</th>
+                        <th style="width: 20%;" class="text-right">Net Pay</th>
+                        <th style="width: 12%;" class="text-center">No of Staff</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.BankLines)
+                    {
+                        <tr>
+                            <td class="text-center">@item.SN</td>
+                            <td class="text-center">@item.BankCode</td>
+                            <td>@item.BankName</td>
+                            <td>@item.Branch</td>
+                            <td class="text-right">@item.NetPay.ToString("N2")</td>
+                            <td class="text-center">@item.NoOfStaff</td>
+                        </tr>
+                    }
+
+                    <tr class="total-row">
+                        <td colspan="4" class="text-center">TOTAL</td>
+                        <td class="text-right">@Model.TotalNetPay.ToString("N2")</td>
+                        <td class="text-center">@Model.TotalStaff</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- ACTIONS PANEL (Export PDF button removed) -->
+            <div class="actions-panel">
+                <button onclick="window.print()" class="btn-print">Print Report</button>
+
+                <a asp-action="ExportBankReportExcel"
+                   asp-route-month="@Model.Month"
+                   asp-route-year="@Model.Year"
+                   class="btn-excel">Export Excel</a>
+
+                <a asp-action="BankReport" class="btn-back">Change Parameters</a>
+                <a asp-controller="Account" asp-action="Dashboard" class="btn-back" style="margin-left: auto;">Back to Dashboard</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

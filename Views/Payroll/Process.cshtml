@@ -1,0 +1,546 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        Process Payroll
+    </title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                                   HEADER
+                                ========================================= */
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                                   MAIN CONTENT
+                                ========================================= */
+
+        .main-container {
+            width: 95%;
+            max-width: 700px;
+            margin: 50px auto;
+        }
+
+        .process-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-top: 8px solid #0b7a43;
+            text-align: center;
+        }
+
+            .process-card h2 {
+                color: #0b7a43;
+                margin-top: 0;
+                margin-bottom: 15px;
+                font-size: 32px;
+            }
+
+            .process-card p {
+                color: #666;
+                margin-bottom: 30px;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+
+        /* =========================================
+                                   PROGRESS BAR
+                                ========================================= */
+
+        .progress-container {
+            width: 100%;
+            height: 35px;
+            background-color: #dfeee4;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid #c8d8cc;
+        }
+
+        .progress-bar {
+            height: 35px;
+            width: 0%;
+            background: linear-gradient(to right, #0b7a43, #15a05b);
+            text-align: center;
+            line-height: 35px;
+            color: white;
+            font-weight: bold;
+            transition: width 0.2s ease;
+        }
+
+        /* =========================================
+                                   BUTTONS & NAVIGATION
+                                ========================================= */
+
+        .btn-process {
+            margin-top: 30px;
+            padding: 14px 30px;
+            background-color: #0b7a43;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+            .btn-process:hover {
+                background-color: #095d33;
+            }
+
+            .btn-process:disabled {
+                background-color: #777;
+                cursor: not-allowed;
+            }
+
+        .dashboard-nav {
+            margin-top: 25px;
+        }
+
+        .btn-dashboard {
+            display: inline-block;
+            color: #555;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+            .btn-dashboard:hover {
+                color: #0b7a43;
+            }
+
+        /* =========================================
+                                   MESSAGE
+                                ========================================= */
+
+        .message {
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 25px;
+        }
+
+        .success-message {
+            color: #0b7a43;
+        }
+
+        .error-message {
+            color: #c62828;
+        }
+
+        .processing-message {
+            color: #555;
+        }
+
+        /* =========================================
+                                   FOOTER
+                                ========================================= */
+
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <div class="header">
+
+        <img src="~/images/UBTH LOGO.jpeg"
+             alt="UBTH Logo" />
+
+        <div class="header-text">
+
+            <h1>
+                University of Benin Teaching Hospital
+            </h1>
+
+            <p>
+                Payroll Portal Management System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+
+    <div class="main-container">
+
+        <div class="process-card">
+
+            <h2>
+                Process Payroll
+            </h2>
+
+            <p>
+                Click the button below to process payroll
+                records for staff salaries, allowances,
+                deductions, net payments, and format account numbers.
+            </p>
+
+
+            <!-- =====================================
+                 ANTI-FORGERY TOKEN
+            ====================================== -->
+
+            <form id="payrollForm">
+
+                @Html.AntiForgeryToken()
+
+            </form>
+
+
+            <!-- =====================================
+                 PROGRESS BAR
+            ====================================== -->
+
+            <div class="progress-container">
+
+                <div id="progressBar"
+                     class="progress-bar">
+
+                    0%
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 BUTTON
+            ====================================== -->
+
+            <button type="button"
+                    id="btnProcess"
+                    class="btn-process">
+
+                Start Processing
+
+            </button>
+
+
+            <!-- =====================================
+                 MESSAGE
+            ====================================== -->
+
+            <div id="message"
+                 class="message">
+            </div>
+
+            <!-- =====================================
+                 BACK TO DASHBOARD
+            ====================================== -->
+            <div class="dashboard-nav">
+                <a asp-controller="Account" asp-action="Dashboard" class="btn-dashboard">&larr; Back to Dashboard</a>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <div class="footer">
+
+        UNIVERSITY OF BENIN TEACHING HOSPITAL
+        &copy; @DateTime.Now.Year
+        Payroll Management System
+
+    </div>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================= -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const button =
+                document.getElementById("btnProcess");
+
+            const progressBar =
+                document.getElementById("progressBar");
+
+            const message =
+                document.getElementById("message");
+
+            const token =
+                document.querySelector(
+                    'input[name="__RequestVerificationToken"]'
+                ).value;
+
+
+            button.addEventListener("click", async function () {
+
+                button.disabled = true;
+
+                button.innerHTML = "Processing...";
+
+                message.className =
+                    "message processing-message";
+
+                message.innerHTML =
+                    "Payroll processing is in progress. Please wait...";
+
+                progressBar.style.width = "0%";
+
+                progressBar.innerHTML = "0%";
+
+
+                let width = 0;
+
+                const progressInterval =
+                    setInterval(function () {
+
+                        if (width < 90) {
+
+                            width++;
+
+                            progressBar.style.width =
+                                width + "%";
+
+                            progressBar.innerHTML =
+                                width + "%";
+                        }
+
+                    }, 50);
+
+
+                try {
+
+                    const url =
+                        '@Url.Action("ProcessPayroll", "Payroll")';
+
+
+                    const response =
+                        await fetch(url, {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "RequestVerificationToken":
+                                    token,
+
+                                "X-Requested-With":
+                                    "XMLHttpRequest"
+                            },
+
+                            body: JSON.stringify({})
+                        });
+
+
+                    clearInterval(progressInterval);
+
+
+                    const contentType =
+                        response.headers.get(
+                            "content-type"
+                        ) || "";
+
+
+                    if (!response.ok) {
+
+                        let errorMessage =
+                            "Payroll processing failed.";
+
+                        if (contentType.includes("application/json")) {
+
+                            const errorData =
+                                await response.json();
+
+                            if (errorData.message) {
+
+                                errorMessage =
+                                    errorData.message;
+                            }
+
+                            if (errorData.error) {
+
+                                errorMessage +=
+                                    " " + errorData.error;
+                            }
+
+                        }
+                        else {
+
+                            const errorText =
+                                await response.text();
+
+                            console.error(
+                                "Server response:",
+                                errorText
+                            );
+
+                            errorMessage =
+                                "The server returned an error. HTTP Status: "
+                                + response.status;
+                        }
+
+                        throw new Error(errorMessage);
+                    }
+
+
+                    if (!contentType.includes("application/json")) {
+
+                        const responseText =
+                            await response.text();
+
+                        console.error(
+                            "Unexpected server response:",
+                            responseText
+                        );
+
+                        throw new Error(
+                            "The server did not return a valid JSON response."
+                        );
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (data.success === true) {
+
+                        progressBar.style.width =
+                            "100%";
+
+                        progressBar.innerHTML =
+                            "100%";
+
+                        message.className =
+                            "message success-message";
+
+                        message.innerHTML =
+                            data.message ||
+                            "Payroll processing completed successfully.";
+
+
+                        button.innerHTML =
+                            "Processing Completed";
+
+                        button.disabled = true;
+
+                        if (data.totalRecords !== undefined) {
+
+                            message.innerHTML +=
+                                "<br><small>" +
+                                data.totalRecords +
+                                " payroll record(s) processed.</small>";
+                        }
+
+                    }
+                    else {
+
+                        throw new Error(
+                            data.message ||
+                            "Payroll processing failed."
+                        );
+                    }
+
+                }
+                catch (error) {
+
+                    clearInterval(progressInterval);
+
+                    console.error(
+                        "Payroll processing error:",
+                        error
+                    );
+
+                    message.className =
+                        "message error-message";
+
+                    message.innerHTML =
+                        error.message ||
+                        "An error occurred while processing payroll.";
+
+                    button.innerHTML =
+                        "Try Again";
+
+                    button.disabled = false;
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>

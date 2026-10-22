@@ -1,0 +1,97 @@
+﻿@model PayrollSystem.Models.PaySlipViewModel
+@{
+    ViewData["Title"] = "Create New Month Payroll";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Create New Month Payroll - UBTH</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8f4;
+            color: #1e3d2f;
+            padding: 40px;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 450px;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-top: 5px solid #0b7a43;
+            text-align: center;
+        }
+
+        img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button, .btn-back {
+            background-color: #0b7a43;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            margin-top: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <h2>Select Payroll Period</h2>
+
+        <form asp-action="ProcessCreateMonth" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" style="color:red; margin-bottom:10px;"></div>
+
+            <label>Select Month:</label>
+            <select asp-for="SelectedMonth" asp-items="Model.Months" required>
+                <option value="">-- Select Month --</option>
+            </select>
+
+            <label>Select Year:</label>
+            <select asp-for="SelectedYear" asp-items="Model.Years" required>
+                <option value="">-- Select Year --</option>
+            </select>
+
+            <button type="submit">Create</button>
+        </form>
+
+        <a asp-controller="Home" asp-action="Index" class="btn-back">Back to Dashboard</a>
+    </div>
+</body>
+</html>

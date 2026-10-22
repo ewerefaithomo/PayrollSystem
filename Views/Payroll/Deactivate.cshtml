@@ -1,0 +1,240 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Staff Payroll Deletion";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Staff Payroll Deletion</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                           HEADER
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                           MAIN CONTENT
+                ========================================= */
+        .main-container {
+            width: 95%;
+            max-width: 700px;
+            margin: 50px auto;
+        }
+
+        .process-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-top: 8px solid #0b7a43;
+        }
+
+            .process-card h2 {
+                color: #0b7a43;
+                margin-top: 0;
+                margin-bottom: 10px;
+                font-size: 32px;
+            }
+
+        .instruction {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        label {
+            font-weight: bold;
+            color: #0b7a43;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        input[type=text] {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+            input[type=text]:focus {
+                outline: none;
+                border: 2px solid #0b7a43;
+            }
+
+        .button-area {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            border: none;
+            padding: 14px 35px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn-search {
+            background: #0b7a43;
+            color: white;
+        }
+
+            .btn-search:hover {
+                background: #085d32;
+            }
+
+        .btn-close {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+
+            .btn-close:hover {
+                background: #4f565c;
+            }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                           FOOTER
+                ========================================= */
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+    <div class="main-container">
+        <div class="process-card">
+            <h2>Staff Payroll Deletion</h2>
+
+            <div class="instruction">
+                Enter the Staff ID of the employee you wish to remove from the active Payroll.
+            </div>
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert-success">
+                    @TempData["Success"]
+                </div>
+            }
+
+            <form asp-action="SearchDeactivate" method="post">
+                <label>Staff ID</label>
+
+                <input type="text"
+                       name="staffId"
+                       required
+                       autofocus
+                       placeholder="Enter Staff ID..." />
+
+                <div class="button-area">
+                    <button type="submit" class="btn btn-search">Search Staff</button>
+
+                    <a asp-controller="Account"
+                       asp-action="Dashboard"
+                       class="btn btn-close">
+                        Back to Dashboard
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

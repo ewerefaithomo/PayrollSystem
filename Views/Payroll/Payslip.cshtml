@@ -1,0 +1,343 @@
+﻿@model PayrollSystem.Models.PaySlipViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Payslip";
+
+    var safeMonths = Model?.Months ?? new List<SelectListItem>();
+    var safeYears = Model?.Years ?? new List<SelectListItem>();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payslip - UBTH Payroll Portal</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   PAGE WRAPPER
+                ========================================= */
+
+        .container {
+            width: 95%;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #0b7a43;
+            margin: 0;
+            font-size: 26px;
+        }
+
+        /* FORM CARD */
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #c8d8cc;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #0b7a43;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            margin-top: 5px;
+            border: 1px solid #c8d8cc;
+            border-radius: 8px;
+            background-color: #fafafa;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+            input:focus, select:focus {
+                border-color: #0b7a43;
+                background-color: #fff;
+                outline: none;
+            }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #0b7a43;
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background-color: #095d33;
+            }
+
+        .btn-success {
+            background-color: #198754;
+            color: white;
+        }
+
+            .btn-success:hover {
+                background-color: #157347;
+            }
+
+        .btn-secondary {
+            background-color: #5a6268;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            transition: background 0.3s ease;
+        }
+
+            .btn-secondary:hover {
+                background-color: #3d4246;
+            }
+
+        .message {
+            color: #c62828;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        hr {
+            border: 0;
+            border-top: 2px solid #dfeee4;
+            margin: 35px 0;
+        }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+
+    <div class="container">
+
+        <div class="top-bar">
+            <h2>Search Individual Pay Slip</h2>
+            <a asp-controller="Account" asp-action="Dashboard" class="btn-secondary">&larr; Back to Dashboard</a>
+        </div>
+
+        <!-- INDIVIDUAL PAYSLIP -->
+        <form asp-action="SearchPayslip" method="post">
+
+            <div>
+                <label>Staff ID</label>
+                <input asp-for="StaffID" required />
+            </div>
+
+            <br />
+
+            <div>
+                <label>Select Month</label>
+                <select asp-for="SelectedMonth" asp-items="safeMonths">
+                    <option value="">--Select Month--</option>
+                </select>
+            </div>
+
+            <br />
+
+            <div>
+                <label>Select Year</label>
+                <select asp-for="SelectedYear" asp-items="safeYears">
+                    <option value="">--Select Year--</option>
+                </select>
+            </div>
+
+            <br />
+
+            <button type="submit" class="btn btn-primary">
+                Search Payslip
+            </button>
+
+        </form>
+
+        <hr />
+
+        <!-- GROUP PAYSLIP  -->
+        <h2>Search Staff Group Payslips</h2>
+        <br />
+
+        <form asp-action="SearchGroupPayslip" method="post">
+
+            <div>
+                <label>Staff Group</label>
+                <select name="staffGroup" required>
+                    <option value="">--Select Staff Group--</option>
+                    <option value="CLINICAL CORPER">CLINICAL CORPER</option>
+                    <option value="CONTRACT">CONTRACT</option>
+                    <option value="INTERN-DIETICIAN">INTERN-DIETICIAN</option>
+                    <option value="DIETICIAN">DIETICIAN</option>
+                    <option value="HONORARY CONSULTANT">HONORARY CONSULTANT</option>
+                    <option value="HOSPITAL CONSULTANT">HOSPITAL CONSULTANT</option>
+                    <option value="INTERN - LABORATORY SCIENTIST">INTERN - LABORATORY SCIENTIST</option>
+                    <option value="INTERN - MEDICAL IMAGING SCIENTIST">INTERN - MEDICAL IMAGING SCIENTIST</option>
+                    <option value="INTERN - PHARMACIST">INTERN - PHARMACIST</option>
+                    <option value="INTERN - PHYSIOTHERAPY">INTERN - PHYSIOTHERAPY</option>
+                    <option value="INTERN- RADIOGRAPHER">INTERN- RADIOGRAPHER</option>
+                    <option value="INTERN-OPTOMETRIST">INTERN-OPTOMETRIST</option>
+                    <option value="MEDICAL CORPER">MEDICAL CORPER</option>
+                    <option value="MEDICAL LAB SCIENTIST">MEDICAL LAB SCIENTIST</option>
+                    <option value="MEDICAL LAB TECHNICIAN">MEDICAL LAB TECHNICIAN</option>
+                    <option value="MEDICAL OFFICER">MEDICAL OFFICER</option>
+                    <option value="NON-CLINICAL CORPER">NON-CLINICAL CORPER</option>
+                    <option value="NURSE INTERN">NURSE INTERN</option>
+                    <option value="NURSES">NURSES</option>
+                    <option value="PARAMEDICS">PARAMEDICS</option>
+                    <option value="PHARMACIST">PHARMACIST</option>
+                    <option value="RESIDENT DOCTOR">RESIDENT DOCTOR</option>
+                    <option value="TUTOR">TUTOR</option>
+                    <option value="ASSIST. ADMIN OFFICER">ASSIST. ADMIN OFFICER</option>
+                    <option value="CHIEF ADMINISTRATION OFFICER">CHIEF ADMINISTRATION OFFICER</option>
+                </select>
+            </div>
+
+            <br />
+
+            <div>
+                <label>Select Month</label>
+                <select name="month" required>
+                    <option value="">--Select Month--</option>
+                    @foreach (var monthItem in safeMonths)
+                    {
+                        <option value="@monthItem.Value">@monthItem.Text</option>
+                    }
+                </select>
+            </div>
+
+            <br />
+
+            <div>
+                <label>Select Year</label>
+                <select name="year" required>
+                    <option value="">--Select Year--</option>
+                    @foreach (var yearItem in safeYears)
+                    {
+                        <option value="@yearItem.Value">@yearItem.Text</option>
+                    }
+                </select>
+            </div>
+
+            <br />
+
+            <button type="submit" class="btn btn-success">
+                Search Group Payslips
+            </button>
+
+        </form>
+
+        <!-- MESSAGES -->
+        @if (ViewBag.Message != null)
+        {
+            <div class="message">@ViewBag.Message</div>
+        }
+
+        @if (ViewBag.GroupMessage != null)
+        {
+            <div class="message">@ViewBag.GroupMessage</div>
+        }
+
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

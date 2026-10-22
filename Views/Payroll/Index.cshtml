@@ -1,0 +1,160 @@
+﻿@model PayrollSystem.Models.AddDeductionViewModel
+
+@{
+    ViewData["Title"] = "Add Deductions";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+
+            <h3>Add Payroll Deductions</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (ViewBag.SuccessMessage != null)
+            {
+                <div class="alert alert-success">
+
+                    <strong>@ViewBag.SuccessMessage</strong>
+
+                    <hr />
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th>Total Records Submitted</th>
+                            <td>@ViewBag.TotalSubmitted</td>
+                        </tr>
+
+                        <tr>
+                            <th>Records Added</th>
+                            <td>@ViewBag.TotalAdded</td>
+                        </tr>
+
+                        <tr>
+                            <th>Failed Records</th>
+                            <td>@ViewBag.TotalFailed</td>
+                        </tr>
+
+                    </table>
+
+                    @if (ViewBag.FailedList != null)
+                    {
+                        <h5>Failed Staff IDs</h5>
+
+                        <textarea class="form-control"
+                          rows="6"
+                          readonly>@ViewBag.FailedList</textarea>
+                    }
+
+                </div>
+            }
+
+            <form asp-action="ProcessAddDeduction"
+                  method="post">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Deduction Head
+
+                    </label>
+
+                    <select asp-for="DeductionHead"
+                            class="form-select">
+
+                        <option value="">-- Select Deduction Head --</option>
+
+                        <option>AMLSN</option>
+
+                        <option>NMA_DUES</option>
+
+                        <option>NMA_SPECIAL_LEVY</option>
+
+                        <option>MEDCAN_DUES</option>
+
+                        <option>ARD</option>
+
+                        <option>NARD</option>
+
+                        <option>RENT</option>
+
+                        <option>RENT_ARREARS</option>
+
+                        <option>TAX</option>
+
+                        <option>TAX_ARREARS</option>
+
+                    </select>
+
+                    <span asp-validation-for="DeductionHead"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Staff IDs and Deduction Amount
+
+                    </label>
+
+                    <textarea asp-for="DeductionData"
+                              rows="18"
+                              class="form-control"
+                              placeholder="Example:
+
+174418,5000
+172810,3000
+165411,15000
+180021,2500"></textarea>
+
+                    <small class="text-muted">
+
+                        Enter one Staff ID and Amount per line separated by a comma.
+
+                    </small>
+
+                </div>
+
+                <div class="mt-4">
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        Add Deduction
+
+                    </button>
+
+                    <a asp-controller="Home"
+                       asp-action="Dashboard"
+                       class="btn btn-secondary">
+
+                        Close
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

@@ -1,0 +1,343 @@
+﻿@model IEnumerable<PayrollSystem.Models.Payroll>
+
+@{
+    Layout = null;
+    string displayMonth = ViewBag.Month ?? Model.FirstOrDefault()?.PaymentMonth?.ToUpper() ?? "";
+    var displayYear = ViewBag.Year != null && (int)ViewBag.Year > 0 ? ViewBag.Year : (Model.FirstOrDefault()?.PaymentYear.ToString() ?? "");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pay Summary PDF - UBTH Payroll Portal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 28px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .container {
+            padding: 30px 20px;
+        }
+
+        .report-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            border-top: 8px solid #0b7a43;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+            .report-header h2 {
+                color: #0b7a43;
+                margin: 0 0 5px 0;
+                font-size: 16px;
+                text-transform: uppercase;
+            }
+
+            .report-header h3 {
+                color: #4b6354;
+                margin: 0;
+                font-size: 13px;
+                text-transform: uppercase;
+                font-weight: normal;
+            }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 8px;
+        }
+
+            .summary-table th, .summary-table td {
+                border: 1px solid #cde6d6;
+                padding: 5px 4px;
+                text-align: center;
+                white-space: nowrap;
+            }
+
+            .summary-table th {
+                background-color: #e2f3e7;
+                color: #0b7a43;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .summary-table tbody tr:nth-child(even) {
+                background-color: #f9fffb;
+            }
+
+            .summary-table tbody tr:hover {
+                background-color: #edfcf1;
+            }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #d4ede0 !important;
+            border-top: 2px solid #0b7a43;
+        }
+
+            .total-row td {
+                color: #0b7a43;
+            }
+
+        .action-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 25px;
+            border-top: 1px dashed #cde6d6;
+            padding-top: 20px;
+        }
+
+        .btn-action {
+            background-color: #0b7a43;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+            .btn-action:hover {
+                background-color: #095d33;
+                color: white;
+            }
+
+        .btn-back {
+            background-color: #6c757d;
+        }
+
+            .btn-back:hover {
+                background-color: #5a6268;
+            }
+
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="report-card">
+
+            <div class="report-header">
+                <h2>UNIVERSITY OF BENIN TEACHING HOSPITAL, BENIN CITY, EDO STATE, NIGERIA</h2>
+                <h3>PAY SUMMARY FOR @displayMonth @displayYear</h3>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Staff ID</th>
+                            <th>Full Name</th>
+                            <th>Staff Group</th>
+                            <th>Grade Level</th>
+
+                            <!-- EARNINGS -->
+                            <th>Consolidated</th>
+                            <th>Allowance</th>
+                            <th>Teaching Allowance</th>
+                            <th>Call Duty Allowance</th>
+                            <th>Hazard Allowance</th>
+                            <th>Shift Allowance</th>
+                            <th>Specialist Allowance</th>
+                            <th>Rural Posting Allowance</th>
+                            <th>Accoutrement Allowance</th>
+                            <th>Conmess Clinical Duty</th>
+                            <th>Conmess Non Clinical</th>
+                            <th>Pharmacist Consult</th>
+                            <th>Arrears</th>
+                            <th>Gross Pay</th>
+
+                            <!-- DEDUCTIONS -->
+                            <th>Refund</th>
+                            <th>Overpayment Deduction</th>
+                            <th>Pension</th>
+                            <th>Tax</th>
+                            <th>Tax Arrears</th>
+                            <th>AMLSN</th>
+                            <th>NMA Dues</th>
+                            <th>NMA Special Levy</th>
+                            <th>MEDCAN Dues</th>
+                            <th>ARD</th>
+                            <th>NARD</th>
+                            <th>Rent</th>
+                            <th>Rent Arrears</th>
+                            <th>Deductions</th>
+
+                            <!-- TOTALS & BANK INFO -->
+                            <th>Net Pay</th>
+                            <th>Bank Name</th>
+                            <th>Account Number</th>
+                            <th>Sort Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int sn = 1;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@(sn++)</td>
+                                <td>@item.StaffID</td>
+                                <td>@item.FullName</td>
+                                <td>@item.Staff_Group</td>
+                                <td>@item.GradeLevel</td>
+
+                                <td>@item.Consolidated.ToString("N2")</td>
+                                <td>@item.Allowance.ToString("N2")</td>
+                                <td>@item.TeachingAllowance.ToString("N2")</td>
+                                <td>@item.CallDutyAllowance.ToString("N2")</td>
+                                <td>@item.HazardAllowance.ToString("N2")</td>
+                                <td>@item.ShiftAllowance.ToString("N2")</td>
+                                <td>@item.SpecialistAllowance.ToString("N2")</td>
+                                <td>@item.RuralPostingAllowance.ToString("N2")</td>
+                                <td>@item.AccoutrementAllowance.ToString("N2")</td>
+                                <td>@item.ConmessClinicalDutyAllowance.ToString("N2")</td>
+                                <td>@item.ConmessNonClinicalAllowance.ToString("N2")</td>
+                                <td>@item.PharmacistConsultAllowance.ToString("N2")</td>
+                                <td>@item.Arrears.ToString("N2")</td>
+                                <td style="font-weight:bold;">@item.Gross_Pay.ToString("N2")</td>
+
+                                <td>@item.Refund.ToString("N2")</td>
+                                <td>@item.OverPaymentDeduction.ToString("N2")</td>
+                                <td>@item.Pension.ToString("N2")</td>
+                                <td>@item.Tax.ToString("N2")</td>
+                                <td>@item.TAX_ARREARS.ToString("N2")</td>
+                                <td>@item.AMLSN.ToString("N2")</td>
+                                <td>@item.NMA_DUES.ToString("N2")</td>
+                                <td>@item.NMA_SPECIAL_LEVY.ToString("N2")</td>
+                                <td>@item.MEDCAN_DUES.ToString("N2")</td>
+                                <td>@item.ARD.ToString("N2")</td>
+                                <td>@item.NARD.ToString("N2")</td>
+                                <td>@item.RENT.ToString("N2")</td>
+                                <td>@item.RENT_ARREARS.ToString("N2")</td>
+                                <td style="font-weight:bold;">@item.Deductions.ToString("N2")</td>
+
+                                <td style="font-weight:bold;">@item.Net_Pay.ToString("N2")</td>
+                                <td>@item.Bank_Name</td>
+                                <td>@item.Account_Number</td>
+                                <td>@item.Sort_Code</td>
+                            </tr>
+                        }
+
+                        <tr class="total-row">
+                            <td colspan="5">TOTAL</td>
+
+                            <td>@string.Format("{0:N2}", ViewBag.TotalConsolidated ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalTeachingAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalCallDutyAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalHazardAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalShiftAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalSpecialistAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalRuralPostingAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalAccoutrementAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalConmessClinicalDutyAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalConmessNonClinicalAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalPharmacistConsultAllowance ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalArrears ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalGrossPay ?? 0)</td>
+
+                            <td>@string.Format("{0:N2}", ViewBag.TotalRefund ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalOverPaymentDeduction ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalPension ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalTax ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalTaxArrears ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalAMLSN ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalNmaDues ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalNmaSpecialLevy ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalMedcanDues ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalARD ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalNARD ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalRent ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalRentArrears ?? 0)</td>
+                            <td>@string.Format("{0:N2}", ViewBag.TotalDeductions ?? 0)</td>
+
+                            <td>@string.Format("{0:N2}", ViewBag.TotalNetPay ?? 0)</td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ACTION BAR (Export PDF button removed) -->
+            <div class="action-bar">
+                <button onclick="window.print()" class="btn-action">Print Document</button>
+                <a asp-action="SearchSummary" class="btn-action btn-back">Change Parameters</a>
+                <a asp-controller="Account" asp-action="Dashboard" class="btn-action btn-back">&larr; Dashboard</a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

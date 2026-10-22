@@ -1,0 +1,304 @@
+﻿@model PayrollSystem.Models.MultipleActivateViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Multiple Payroll Activation";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiple Payroll Activation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   MAIN CONTENT
+                ========================================= */
+        .main-container {
+            width: 95%;
+            max-width: 950px;
+            margin: 30px auto;
+        }
+
+        .container {
+            width: 100%;
+            background: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-top: 8px solid #0b7a43;
+            box-sizing: border-box;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            color: #0b7a43;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .btn-dashboard {
+            display: inline-block;
+            color: #555;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+            .btn-dashboard:hover {
+                color: #0b7a43;
+            }
+
+        .instruction {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px;
+            resize: none;
+            padding: 15px;
+            font-size: 17px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: Consolas, monospace;
+            box-sizing: border-box;
+        }
+
+            textarea:focus {
+                outline: none;
+                border: 2px solid #0b7a43;
+            }
+
+        .button-area {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn {
+            background: #0b7a43;
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+            .btn:hover {
+                background: #085d32;
+            }
+
+        .result {
+            margin-top: 35px;
+            background: #f7fff7;
+            border-left: 6px solid #0b7a43;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+            .result h3 {
+                color: #0b7a43;
+                margin-top: 0;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+            table td {
+                padding: 10px;
+                border: 1px solid #ddd;
+            }
+
+        .notfound {
+            margin-top: 20px;
+            background: #fff8f8;
+            border-left: 5px solid red;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        ul {
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+    <div class="main-container">
+        <div class="container">
+
+            <div class="top-bar">
+                <h2 class="title">Multiple Payroll Activation</h2>
+                <a asp-controller="Account" asp-action="Dashboard" class="btn-dashboard">&larr; Back to Dashboard</a>
+            </div>
+
+            <div class="instruction">
+                Enter one Staff ID per line.
+                <br />Example:
+                <br />17124
+                <br />17653
+                <br />19022
+                <br />21008
+            </div>
+
+            @if (TempData["Success"] != null)
+            {
+                <div style="
+                            background:#d4edda;
+                            color:#155724;
+                            border:1px solid #c3e6cb;
+                            padding:15px;
+                            margin-bottom:20px;
+                            border-radius:6px;
+                            font-weight:bold;">
+                    @TempData["Success"]
+                </div>
+            }
+
+            <form asp-action="ProcessActivate" asp-controller="Payroll" method="post">
+                <div>
+                    <textarea asp-for="StaffIds" placeholder="Enter one Staff ID per line..."></textarea>
+                </div>
+
+                <div class="button-area">
+                    <button type="submit" class="btn">
+                        Activate Staff
+                    </button>
+                </div>
+            </form>
+
+            @if (Model != null && Model.TotalEntered > 0)
+            {
+                <div class="result">
+                    <h3>Processing Summary</h3>
+                    <table>
+                        <tr>
+                            <td>Total Staff IDs Entered</td>
+                            <td><strong>@Model.TotalEntered</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Total Records Found</td>
+                            <td><strong>@Model.TotalFound</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Total Records Activated</td>
+                            <td><strong style="color:green">@Model.TotalActivated</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Total Records Not Found</td>
+                            <td><strong style="color:red">@Model.TotalNotFound</strong></td>
+                        </tr>
+                    </table>
+
+                    @if (Model.NotFoundStaffIds != null && Model.NotFoundStaffIds.Any())
+                    {
+                        <div class="notfound">
+                            <h4>Staff IDs Not Found</h4>
+                            <ul>
+                                @foreach (var item in Model.NotFoundStaffIds)
+                                {
+                                    <li>@item</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

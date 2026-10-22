@@ -1,0 +1,245 @@
+﻿@model PayrollSystem.Models.PaySlipViewModel
+
+@{
+    Layout = null;
+    var p = Model.PayrollRecord;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payslip PDF - UBTH</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+            color: black;
+            background-color: #ffffff;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+        }
+
+            .header img {
+                width: 75px;
+                height: 75px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 24px;
+        }
+
+        .header-text p {
+            margin: 4px 0 0 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* =========================================
+                   CONTENT WRAPPER
+                ========================================= */
+
+        .content-container {
+            padding: 20px 30px;
+        }
+
+        h2, h3, h4 {
+            text-align: center;
+            margin: 5px 0;
+        }
+
+            h3.section-title {
+                color: #0b7a43;
+                text-align: left;
+                margin-top: 15px;
+                font-size: 14px;
+            }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-grid {
+            margin-bottom: 10px;
+        }
+
+            .info-grid p {
+                margin: 4px 0;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th {
+            background-color: #e5e5e5;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        td {
+            padding: 7px 8px;
+            font-size: 12px;
+        }
+
+        .summary {
+            margin-top: 15px;
+        }
+
+            .summary td {
+                font-weight: bold;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN PAYSLIP CONTENT
+    ========================================= -->
+
+    <div class="content-container">
+
+        <h2>EMPLOYEE PAYSLIP</h2>
+        <h4>@p.PaymentMonth, @p.PaymentYear</h4>
+
+        <hr />
+
+        <div class="info-grid">
+            <p><strong>EMPLOYEE NAME:</strong> @p.FullName</p>
+            <p><strong>GRADE LEVEL:</strong> @p.GradeLevel</p>
+            <p><strong>STAFF ID:</strong> @p.StaffID</p>
+            <p><strong>STAFF GROUP:</strong> @p.Staff_Group</p>
+        </div>
+
+        <hr />
+
+        <h3 class="section-title">BANK INFORMATION DETAILS</h3>
+        <p><strong>BANK NAME:</strong> @p.Bank_Name</p>
+        <p><strong>BANK BRANCH:</strong> @p.Bank_Branch</p>
+        <p><strong>ACCOUNT NUMBER:</strong> @p.Account_Number</p>
+
+        <hr />
+
+        <table>
+            <tr>
+                <th>EARNINGS</th>
+                <th>AMOUNT</th>
+                <th>DEDUCTIONS</th>
+                <th>AMOUNT</th>
+            </tr>
+
+            @{
+                var earnings = new List<(string Name, decimal Amount)>
+                        {
+                        ("CONSOLIDATED", p.Consolidated),
+                        ("ALLOWANCE", p.Allowance),
+                        ("TEACHING ALLOWANCE", p.TeachingAllowance),
+                        ("CALL DUTY ALLOWANCE", p.CallDutyAllowance),
+                        ("HAZARD ALLOWANCE", p.HazardAllowance),
+                        ("SHIFT ALLOWANCE", p.ShiftAllowance),
+                        ("SPECIALIST ALLOWANCE", p.SpecialistAllowance),
+                        ("RURAL POSTING ALLOWANCE", p.RuralPostingAllowance),
+                        ("ACCOUTREMENT ALLOWANCE", p.AccoutrementAllowance),
+                        ("CONMESS CLINICAL DUTY ALLOWANCE", p.ConmessClinicalDutyAllowance),
+                        ("CONMESS NON CLINICAL ALLOWANCE", p.ConmessNonClinicalAllowance),
+                        ("PHARMACIST CONSULT ALLOWANCE", p.PharmacistConsultAllowance),
+                        ("ARREARS", p.Arrears)
+                        }
+                .Where(x => x.Amount > 0)
+                .ToList();
+
+                var deductions = new List<(string Name, decimal Amount)>
+                        {
+                        ("REFUND (CR)", p.Refund),
+                        ("OVER PAYMENT DEDUCTION", p.OverPaymentDeduction),
+                        ("PENSION", p.Pension),
+                        ("TAX", p.Tax),
+                        ("TAX ARREARS", p.TAX_ARREARS),
+                        ("AMLSN", p.AMLSN),
+                        ("NMA DUES", p.NMA_DUES),
+                        ("NMA SPECIAL LEVY", p.NMA_SPECIAL_LEVY),
+                        ("MEDCAN DUES", p.MEDCAN_DUES),
+                        ("ARD", p.ARD),
+                        ("NARD", p.NARD),
+                        ("RENT", p.RENT),
+                        ("RENT ARREARS", p.RENT_ARREARS)
+                        }
+                .Where(x => x.Amount > 0)
+                .ToList();
+
+                int maxRows = Math.Max(earnings.Count, deductions.Count);
+            }
+
+            @for (int i = 0; i < maxRows; i++)
+            {
+                <tr>
+                    <td>@(i<earnings.Count? earnings[i].Name : "")</td>
+                    <td>@(i<earnings.Count? earnings[i].Amount.ToString("N2") : "")</td>
+                    <td>@(i<deductions.Count? deductions[i].Name : "")</td>
+                    <td>@(i<deductions.Count? deductions[i].Amount.ToString("N2") : "")</td>
+                </tr>
+            }
+        </table>
+
+        <table class="summary">
+            <tr>
+                <th>SUMMARY OF PAYMENTS</th>
+                <th>AMOUNT</th>
+            </tr>
+            <tr>
+                <td>GROSS EARNINGS</td>
+                <td>@p.Gross_Pay.ToString("N2")</td>
+            </tr>
+            <tr>
+                <td>GROSS DEDUCTIONS</td>
+                <td>@p.Deductions.ToString("N2")</td>
+            </tr>
+            <tr>
+                <td>NET EARNINGS</td>
+                <td>@p.Net_Pay.ToString("N2")</td>
+            </tr>
+        </table>
+
+    </div>
+
+</body>
+</html>

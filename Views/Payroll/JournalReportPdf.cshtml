@@ -1,0 +1,285 @@
+﻿@model PayrollSystem.Models.JournalReportViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Journal Report PDF</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+        }
+
+        /* =========================================
+                   HEADER (Matching Process Payroll Page)
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 28px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   DOCUMENT TITLE SECTION
+                ========================================= */
+        .doc-title-container {
+            text-align: center;
+            margin: 25px 20px 15px 20px;
+        }
+
+            .doc-title-container h2 {
+                color: #0b7a43;
+                font-size: 18px;
+                margin: 0 0 5px 0;
+                text-transform: uppercase;
+            }
+
+            .doc-title-container h3 {
+                color: #333;
+                font-size: 15px;
+                margin: 0;
+                font-weight: normal;
+            }
+
+        /* =========================================
+                   TABLE CONTAINER & STYLING
+                ========================================= */
+        .table-container {
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-top: 6px solid #0b7a43;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            border: 1px solid #cde6d6;
+            padding: 10px;
+            background-color: #e2f3e7;
+            color: #0b7a43;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        td {
+            border: 1px solid #cde6d6;
+            padding: 10px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fffb;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #d4ede0 !important;
+            color: #0b7a43;
+        }
+
+        /* =========================================
+                   ACTION BAR
+                ========================================= */
+        .action-bar-wrapper {
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+            text-align: center;
+        }
+
+        .action-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            display: inline-block;
+        }
+
+        .btn-action {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0b7a43;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin: 0 5px;
+        }
+
+            .btn-action:hover {
+                background-color: #095d33;
+                color: white;
+            }
+
+        .btn-dashboard {
+            background-color: #6c757d;
+        }
+
+            .btn-dashboard:hover {
+                background-color: #5a6268;
+            }
+
+        .hidden-pdf-link {
+            display: none;
+        }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+        .footer {
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        @@media print {
+            body {
+                background-color: white;
+            }
+
+            .table-container {
+                box-shadow: none;
+                padding: 0;
+                border-top: none;
+            }
+
+            .action-bar-wrapper {
+                display: none;
+            }
+
+            .footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         DOCUMENT TITLE SECTION
+    ========================================= -->
+    <div class="doc-title-container">
+        <h2>UNIVERSITY OF BENIN TEACHING HOSPITAL</h2>
+        <h3>PAYROLL JOURNAL FOR THE MONTH OF @Model.Month, @Model.Year</h3>
+    </div>
+
+    <!-- =========================================
+         DATA TABLE CONTAINER
+    ========================================= -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>DESCRIPTION</th>
+                    <th>TOTAL STAFF</th>
+                    <th>DEBIT</th>
+                    <th>CREDIT</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.JournalLines)
+                {
+                    <tr>
+                        <td class="center">@item.SN</td>
+                        <td>@item.Description</td>
+                        <td class="center">@item.TotalStaff</td>
+                        <td class="right">@item.Debit.ToString("N2")</td>
+                        <td class="right">@item.Credit.ToString("N2")</td>
+                    </tr>
+                }
+                <tr class="total-row">
+                    <td colspan="3" class="center">TOTAL</td>
+                    <td class="right">@Model.TotalDebit.ToString("N2")</td>
+                    <td class="right">@Model.TotalCredit.ToString("N2")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- =========================================
+         ACTION BAR
+    ========================================= -->
+    <div class="action-bar-wrapper">
+        <div class="action-bar">
+            <button onclick="window.print()" class="btn-action">Print Report</button>
+            <a asp-action="ExportJournalReportPdf" asp-route-month="@Model.Month" asp-route-year="@Model.Year" class="hidden-pdf-link">Export PDF</a>
+            <a asp-controller="Account" asp-action="Dashboard" class="btn-action btn-dashboard">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,844 @@
+﻿@model PayrollSystem.Models.Payroll
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Add New Staff";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Staff - UBTH Payroll</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   MAIN CONTENT
+                ========================================= */
+
+        .main-container {
+            width: 95%;
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        .process-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-top: 8px solid #0b7a43;
+            text-align: left;
+        }
+
+            .process-card h2 {
+                color: #0b7a43;
+                margin-top: 0;
+                margin-bottom: 10px;
+                font-size: 32px;
+                text-align: center;
+            }
+
+            .process-card > p {
+                color: #666;
+                margin-bottom: 30px;
+                font-size: 16px;
+                line-height: 1.6;
+                text-align: center;
+            }
+
+        /* =========================================
+                   FORM STYLE
+                ========================================= */
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+            .field label {
+                font-weight: bold;
+                color: #0b7a43;
+                font-size: 14px;
+                display: block;
+                margin-bottom: 6px;
+            }
+
+            .field input, .field select {
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid #c8d8cc;
+                border-radius: 8px;
+                outline: none;
+                box-sizing: border-box;
+                font-size: 15px;
+                background-color: #fafafa;
+            }
+
+                .field input:focus, .field select:focus {
+                    border-color: #0b7a43;
+                    background-color: #fff;
+                }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        button[type="submit"] {
+            background-color: #0b7a43;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s ease;
+        }
+
+            button[type="submit"]:hover {
+                background-color: #095d33;
+            }
+
+        .dashboard-nav {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn-dashboard {
+            display: inline-block;
+            color: #555;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+            .btn-dashboard:hover {
+                color: #0b7a43;
+            }
+
+        .success {
+            color: #0b7a43;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .error {
+            color: #c62828;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+
+    <div class="main-container">
+
+        <div class="process-card">
+
+            <h2>Add New Staff</h2>
+            <p>Fill in the staff details and salary configurations below to register a new employee record.</p>
+
+            <form method="post">
+
+                <div class="field">
+                    <label>File No</label>
+                    <input asp-for="FileNo" id="FileNo" required />
+                </div>
+
+                <div class="field">
+                    <label>Staff ID</label>
+                    <input asp-for="StaffID" id="StaffID" required />
+                </div>
+
+                <div class="field">
+                    <label>Full Name</label>
+                    <input asp-for="FullName" required />
+                </div>
+
+                <div class="field">
+                    <label>Staff Group</label>
+                    <input asp-for="Staff_Group" list="staffGroupList" placeholder="Select or type a Staff Group..." autocomplete="off" />
+                    <datalist id="staffGroupList">
+                        <option value="CLINICAL CORPER"></option>
+                        <option value="CONTRACT"></option>
+                        <option value="INTERN-DIETICIAN"></option>
+                        <option value="DIETICIAN"></option>
+                        <option value="HONORARY CONSULTANT"></option>
+                        <option value="HOSPITAL CONSULTANT"></option>
+                        <option value="INTERN - LABORATORY SCIENTIST"></option>
+                        <option value="INTERN - MEDICAL IMAGING SCIENTIST"></option>
+                        <option value="INTERN - PHARMACIST"></option>
+                        <option value="INTERN - PHYSIOTHERAPY"></option>
+                        <option value="INTERN- RADIOGRAPHER"></option>
+                        <option value="INTERN-OPTOMETRIST"></option>
+                        <option value="MEDICAL CORPER"></option>
+                        <option value="MEDICAL LAB SCIENTIST"></option>
+                        <option value="MEDICAL LAB TECHNICIAN"></option>
+                        <option value="MEDICAL OFFICER"></option>
+                        <option value="NON-CLINICAL CORPER"></option>
+                        <option value="NURSE INTERN"></option>
+                        <option value="NURSES"></option>
+                        <option value="PARAMEDICS"></option>
+                        <option>PHARMACIST</option>
+                        <option value="RESIDENT DOCTOR"></option>
+                        <option value="TUTOR"></option>
+                        <option value="ASSIST. ADMIN OFFICER"></option>
+                        <option value="CHIEF ADMINISTRATION OFFICER"></option>
+                    </datalist>
+                </div>
+
+                <div class="field">
+                    <label>Grade / Step</label>
+                    <select asp-for="GradeLevel" id="GradeLevel">
+                        <option value="">--Select Grade/Step--</option>
+                        <option>CONMESS 1/1</option>
+                        <option>CONMESS 2/1</option>
+                        <option>CONMESS 2/2</option>
+                        <option>CONMESS 2/3</option>
+                        <option>CONMESS 2/4</option>
+                        <option>CONMESS 2/5</option>
+                        <option>CONMESS 2/6</option>
+                        <option>CONMESS 2/7</option>
+                        <option>CONMESS 2/8</option>
+                        <option>CONMESS 2/9</option>
+                        <option>CONMESS 2/10</option>
+                        <option>CONMESS 2/11</option>
+                        <option>CONMESS 3/1</option>
+                        <option>CONMESS 3/2</option>
+                        <option>CONMESS 3/3</option>
+                        <option>CONMESS 3/4</option>
+                        <option>CONMESS 3/5</option>
+                        <option>CONMESS 3/6</option>
+                        <option>CONMESS 3/7</option>
+                        <option>CONMESS 3/8</option>
+                        <option>CONMESS 3/9</option>
+                        <option>CONMESS 3/10</option>
+                        <option>CONMESS 3/11</option>
+                        <option>CONMESS 4/1</option>
+                        <option>CONMESS 4/2</option>
+                        <option>CONMESS 4/3</option>
+                        <option>CONMESS 4/4</option>
+                        <option>CONMESS 4/5</option>
+                        <option>CONMESS 4/6</option>
+                        <option>CONMESS 4/7</option>
+                        <option>CONMESS 4/8</option>
+                        <option>CONMESS 4/9</option>
+                        <option>CONMESS 4/10</option>
+                        <option>CONMESS 4/11</option>
+                        <option>CONMESS 5/1</option>
+                        <option>CONMESS 5/2</option>
+                        <option>CONMESS 5/3</option>
+                        <option>CONMESS 5/4</option>
+                        <option>CONMESS 5/5</option>
+                        <option>CONMESS 5/6</option>
+                        <option>CONMESS 5/7</option>
+                        <option>CONMESS 5/8</option>
+                        <option>CONMESS 5/9</option>
+                        <option>CONMESS 6/1</option>
+                        <option>CONMESS 6/2</option>
+                        <option>CONMESS 6/3</option>
+                        <option>CONMESS 6/4</option>
+                        <option>CONMESS 6/5</option>
+                        <option>CONMESS 6/6</option>
+                        <option>CONMESS 6/7</option>
+                        <option>CONMESS 6/8</option>
+                        <option>CONMESS 6/9</option>
+                        <option>CONMESS 7/1</option>
+                        <option>CONMESS 7/2</option>
+                        <option>CONMESS 7/3</option>
+                        <option>CONMESS 7/4</option>
+                        <option>CONMESS 7/5</option>
+                        <option>CONMESS 7/6</option>
+                        <option>CONMESS 7/7</option>
+                        <option>CONMESS 7/8</option>
+                        <option>CONMESS 7/9</option>
+                        <option>HON. CONSULTANT</option>
+                        <option>TOPSAL4</option>
+                        <option>CONHESS 1/1</option>
+                        <option>CONHESS 1/2</option>
+                        <option>CONHESS 1/3</option>
+                        <option>CONHESS 1/4</option>
+                        <option>CONHESS 1/5</option>
+                        <option>CONHESS 1/6</option>
+                        <option>CONHESS 1/7</option>
+                        <option>CONHESS 1/8</option>
+                        <option>CONHESS 1/9</option>
+                        <option>CONHESS 1/10</option>
+                        <option>CONHESS 1/11</option>
+                        <option>CONHESS 1/12</option>
+                        <option>CONHESS 1/13</option>
+                        <option>CONHESS 1/14</option>
+                        <option>CONHESS 1/15</option>
+                        <option>CONHESS 2/1</option>
+                        <option>CONHESS 2/2</option>
+                        <option>CONHESS 2/3</option>
+                        <option>CONHESS 2/4</option>
+                        <option>CONHESS 2/5</option>
+                        <option>CONHESS 2/6</option>
+                        <option>CONHESS 2/7</option>
+                        <option>CONHESS 2/8</option>
+                        <option>CONHESS 2/9</option>
+                        <option>CONHESS 2/10</option>
+                        <option>CONHESS 2/11</option>
+                        <option>CONHESS 2/12</option>
+                        <option>CONHESS 2/13</option>
+                        <option>CONHESS 2/14</option>
+                        <option>CONHESS 2/15</option>
+                        <option>CONHESS 3/1</option>
+                        <option>CONHESS 3/2</option>
+                        <option>CONHESS 3/3</option>
+                        <option>CONHESS 3/4</option>
+                        <option>CONHESS 3/5</option>
+                        <option>CONHESS 3/6</option>
+                        <option>CONHESS 3/7</option>
+                        <option>CONHESS 3/8</option>
+                        <option>CONHESS 3/9</option>
+                        <option>CONHESS 3/10</option>
+                        <option>CONHESS 3/11</option>
+                        <option>CONHESS 3/12</option>
+                        <option>CONHESS 3/13</option>
+                        <option>CONHESS 3/14</option>
+                        <option>CONHESS 3/15</option>
+                        <option>CONHESS 4/1</option>
+                        <option>CONHESS 4/2</option>
+                        <option>CONHESS 4/3</option>
+                        <option>CONHESS 4/4</option>
+                        <option>CONHESS 4/5</option>
+                        <option>CONHESS 4/6</option>
+                        <option>CONHESS 4/7</option>
+                        <option>CONHESS 4/8</option>
+                        <option>CONHESS 4/9</option>
+                        <option>CONHESS 4/10</option>
+                        <option>CONHESS 4/11</option>
+                        <option>CONHESS 4/12</option>
+                        <option>CONHESS 4/13</option>
+                        <option>CONHESS 4/14</option>
+                        <option>CONHESS 4/15</option>
+                        <option>CONHESS 5/1</option>
+                        <option>CONHESS 5/2</option>
+                        <option>CONHESS 5/3</option>
+                        <option>CONHESS 5/4</option>
+                        <option>CONHESS 5/5</option>
+                        <option>CONHESS 5/6</option>
+                        <option>CONHESS 5/7</option>
+                        <option>CONHESS 5/8</option>
+                        <option>CONHESS 5/9</option>
+                        <option>CONHESS 5/10</option>
+                        <option>CONHESS 5/11</option>
+                        <option>CONHESS 5/12</option>
+                        <option>CONHESS 5/13</option>
+                        <option>CONHESS 5/14</option>
+                        <option>CONHESS 15/15</option>
+                        <option>CONHESS 6/1</option>
+                        <option>CONHESS 6/2</option>
+                        <option>CONHESS 6/3</option>
+                        <option>CONHESS 6/4</option>
+                        <option>CONHESS 6/5</option>
+                        <option>CONHESS 6/6</option>
+                        <option>CONHESS 6/7</option>
+                        <option>CONHESS 6/8</option>
+                        <option>CONHESS 6/9</option>
+                        <option>CONHESS 6/10</option>
+                        <option>CONHESS 6/11</option>
+                        <option>CONHESS 6/12</option>
+                        <option>CONHESS 6/13</option>
+                        <option>CONHESS 6/14</option>
+                        <option>CONHESS 6/15</option>
+                        <option>CONHESS 7/1</option>
+                        <option>CONHESS 7/2</option>
+                        <option>CONHESS 7/3</option>
+                        <option>CONHESS 7/4</option>
+                        <option>CONHESS 7/5</option>
+                        <option>CONHESS 7/6</option>
+                        <option>CONHESS 7/7</option>
+                        <option>CONHESS 7/8</option>
+                        <option>CONHESS 7/9</option>
+                        <option>CONHESS 7/10</option>
+                        <option>CONHESS 7/11</option>
+                        <option>CONHESS 7/12</option>
+                        <option>CONHESS 7/13</option>
+                        <option>CONHESS 7/14</option>
+                        <option>CONHESS 7/15</option>
+                        <option>CONHESS 8/1</option>
+                        <option>CONHESS 8/2</option>
+                        <option>CONHESS 8/3</option>
+                        <option>CONHESS 8/4</option>
+                        <option>CONHESS 8/5</option>
+                        <option>CONHESS 8/6</option>
+                        <option>CONHESS 8/7</option>
+                        <option>CONHESS 8/8</option>
+                        <option>CONHESS 8/9</option>
+                        <option>CONHESS 8/10</option>
+                        <option>CONHESS 8/11</option>
+                        <option>CONHESS 8/12</option>
+                        <option>CONHESS 8/13</option>
+                        <option>CONHESS 8/14</option>
+                        <option>CONHESS 8/15</option>
+                        <option>CONHESS 9/1</option>
+                        <option>CONHESS 9/2</option>
+                        <option>CONHESS 9/3</option>
+                        <option>CONHESS 9/4</option>
+                        <option>CONHESS 9/5</option>
+                        <option>CONHESS 9/6</option>
+                        <option>CONHESS 9/7</option>
+                        <option>CONHESS 9/8</option>
+                        <option>CONHESS 9/9</option>
+                        <option>CONHESS 9/10</option>
+                        <option>CONHESS 9/11</option>
+                        <option>CONHESS 9/12</option>
+                        <option>CONHESS 9/13</option>
+                        <option>CONHESS 9/14</option>
+                        <option>CONHESS 9/15</option>
+                        <option>CONHESS 10/1</option>
+                        <option>CONHESS 10/2</option>
+                        <option>CONHESS 10/3</option>
+                        <option>CONHESS 10/4</option>
+                        <option>CONHESS 10/5</option>
+                        <option>CONHESS 10/6</option>
+                        <option>CONHESS 10/7</option>
+                        <option>CONHESS 10/8</option>
+                        <option>CONHESS 10/9</option>
+                        <option>CONHESS 10/10</option>
+                        <option>CONHESS 10/11</option>
+                        <option>CONHESS 10/12</option>
+                        <option>CONHESS 10/13</option>
+                        <option>CONHESS 10/14</option>
+                        <option>CONHESS 10/15</option>
+                        <option>CONHESS 11/1</option>
+                        <option>CONHESS 11/2</option>
+                        <option>CONHESS 11/3</option>
+                        <option>CONHESS 11/4</option>
+                        <option>CONHESS 11/5</option>
+                        <option>CONHESS 11/6</option>
+                        <option>CONHESS 11/7</option>
+                        <option>CONHESS 11/8</option>
+                        <option>CONHESS 11/9</option>
+                        <option>CONHESS 11/10</option>
+                        <option>CONHESS 11/11</option>
+                        <option>CONHESS 11/12</option>
+                        <option>CONHESS 11/13</option>
+                        <option>CONHESS 11/14</option>
+                        <option>CONHESS 11/15</option>
+                        <option>CONHESS 12/1</option>
+                        <option>CONHESS 12/2</option>
+                        <option>CONHESS 12/3</option>
+                        <option>CONHESS 12/4</option>
+                        <option>CONHESS 12/5</option>
+                        <option>CONHESS 12/6</option>
+                        <option>CONHESS 12/7</option>
+                        <option>CONHESS 12/8</option>
+                        <option>CONHESS 12/9</option>
+                        <option>CONHESS 12/10</option>
+                        <option>CONHESS 12/11</option>
+                        <option>CONHESS 12/12</option>
+                        <option>CONHESS 12/13</option>
+                        <option>CONHESS 12/14</option>
+                        <option>CONHESS 12/15</option>
+                        <option>CONHESS 13/1</option>
+                        <option>CONHESS 13/2</option>
+                        <option>CONHESS 13/3</option>
+                        <option>CONHESS 13/4</option>
+                        <option>CONHESS 13/5</option>
+                        <option>CONHESS 13/6</option>
+                        <option>CONHESS 13/7</option>
+                        <option>CONHESS 13/8</option>
+                        <option>CONHESS 13/9</option>
+                        <option>CONHESS 13/10</option>
+                        <option>CONHESS 13/11</option>
+                        <option>CONHESS 13/12</option>
+                        <option>CONHESS 13/13</option>
+                        <option>CONHESS 13/14</option>
+                        <option>CONHESS 13/15</option>
+                        <option>CONHESS 14/1</option>
+                        <option>CONHESS 14/2</option>
+                        <option>CONHESS 14/3</option>
+                        <option>CONHESS 14/4</option>
+                        <option>CONHESS 14/5</option>
+                        <option>CONHESS 14/6</option>
+                        <option>CONHESS 14/7</option>
+                        <option>CONHESS 14/8</option>
+                        <option>CONHESS 14/9</option>
+                        <option>CONHESS 14/10</option>
+                        <option>CONHESS 14/11</option>
+                        <option>CONHESS 14/12</option>
+                        <option>CONHESS 14/13</option>
+                        <option>CONHESS 14/14</option>
+                        <option>CONHESS 14/15</option>
+                        <option>CONHESS 15/1</option>
+                        <option>CONHESS 15/2</option>
+                        <option>CONHESS 15/3</option>
+                        <option>CONHESS 15/4</option>
+                        <option>CONHESS 15/5</option>
+                        <option>CONHESS 15/6</option>
+                        <option>CONHESS 15/7</option>
+                        <option>CONHESS 15/8</option>
+                        <option>CONHESS 15/9</option>
+                        <option>CONHESS 15/10</option>
+                        <option>CONHESS 15/11</option>
+                        <option>CONHESS 15/12</option>
+                        <option>CONHESS 15/13</option>
+                        <option>CONHESS 15/14</option>
+                        <option>CONHESS 15/15</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Consolidated</label>
+                    <input asp-for="Consolidated" id="Consolidated" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Allowance</label>
+                    <input asp-for="Allowance" id="Allowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Teaching Allowance</label>
+                    <input asp-for="TeachingAllowance" id="TeachingAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Call Duty Allowance</label>
+                    <input asp-for="CallDutyAllowance" id="CallDutyAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Hazard Allowance</label>
+                    <input asp-for="HazardAllowance" id="HazardAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Shift Allowance</label>
+                    <input asp-for="ShiftAllowance" id="ShiftAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Specialist Allowance</label>
+                    <input asp-for="SpecialistAllowance" id="SpecialistAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Rural Posting Allowance</label>
+                    <input asp-for="RuralPostingAllowance" id="RoralPostingAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Accoutrement Allowance</label>
+                    <input asp-for="AccoutrementAllowance" id="AccoutrementAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Conmess Clinical Duty Allowance</label>
+                    <input asp-for="ConmessClinicalDutyAllowance" id="ConmessClinicalDutyAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Conmess Non Clinical Allowance</label>
+                    <input asp-for="ConmessNonClinicalAllowance" id="ConmessNonClinicalAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Pharmacist Consult Allowance</label>
+                    <input asp-for="PharmacistConsultAllowance" id="PharmacistConsultAllowance" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Arrears</label>
+                    <input asp-for="Arrears" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Refund</label>
+                    <input asp-for="Refund" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Over Payment Deduction</label>
+                    <input asp-for="OverPaymentDeduction" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Pension</label>
+                    <input asp-for="Pension" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Tax</label>
+                    <input asp-for="Tax" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Tax Arrears</label>
+                    <input asp-for="TAX_ARREARS" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>AMLSN</label>
+                    <input asp-for="AMLSN" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>NMA DUES</label>
+                    <input asp-for="NMA_DUES" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>NMA SPECIAL LEVY</label>
+                    <input asp-for="NMA_SPECIAL_LEVY" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>MEDCAN DUES</label>
+                    <input asp-for="MEDCAN_DUES" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>ARD</label>
+                    <input asp-for="ARD" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>NARD</label>
+                    <input asp-for="NARD" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>RENT</label>
+                    <input asp-for="RENT" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>RENT ARREARS</label>
+                    <input asp-for="RENT_ARREARS" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Deductions</label>
+                    <input asp-for="Deductions" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Payment Month</label>
+                    <select asp-for="PaymentMonth">
+                        <option value="">--Select Month--</option>
+                        <option>JANUARY</option>
+                        <option>FEBRUARY</option>
+                        <option>MARCH</option>
+                        <option>APRIL</option>
+                        <option>MAY</option>
+                        <option>JUNE</option>
+                        <option>JULY</option>
+                        <option>AUGUST</option>
+                        <option>SEPTEMBER</option>
+                        <option>OCTOBER</option>
+                        <option>NOVEMBER</option>
+                        <option>DECEMBER</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Payment Year</label>
+                    <select asp-for="PaymentYear">
+                        <option value="">--Select Year--</option>
+                        <option>2026</option>
+                        <option>2027</option>
+                        <option>2028</option>
+                        <option>2029</option>
+                        <option>2030</option>
+                        <option>2031</option>
+                        <option>2032</option>
+                        <option>2033</option>
+                        <option>2034</option>
+                        <option>2035</option>
+                        <option>2036</option>
+                        <option>2037</option>
+                        <option>2038</option>
+                        <option>2039</option>
+                        <option>2040</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Bank Name</label>
+                    <select asp-for="Bank_Name">
+                        <option value="">--Select Bank--</option>
+                        <option>ACCESS BANK PLC</option>
+                        <option>CITIBANK NIGERIA LIMITED</option>
+                        <option>ECOBANK NIGERIA PLC</option>
+                        <option>FIDELITY BANK PLC</option>
+                        <option>FIRST BANK OF NIGERIA LIMITED</option>
+                        <option>FIRST CITY MONUMENT BANK (FCMB)</option>
+                        <option>GLOBUS BANK LIMITED</option>
+                        <option>GUARANTY TRUST BANK (GTBANK)</option>
+                        <option>JAIZ BANK PLC</option>
+                        <option>KEYSTONE BANK LIMITED</option>
+                        <option>POLARIS BANK PLC</option>
+                        <option>PROVIDUS BANK LIMITED</option>
+                        <option>STANBIC IBTC BANK PLC</option>
+                        <option>STANDARD CHARTERED BANK NIGERIA</option>
+                        <option>STERLING BANK PLC</option>
+                        <option>SUNTRUST BANK</option>
+                        <option>TAJ BANK</option>
+                        <option>TITAN TRUST BANK LIMITED</option>
+                        <option>UNION BANK OF NIGERIA PLC</option>
+                        <option>UNITED BANK FOR AFRICA (UBA)</option>
+                        <option>UNITY BANK PLC</option>
+                        <option>WEMA BANK PLC</option>
+                        <option>ZENITH BANK PLC</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Bank Branch</label>
+                    <input asp-for="Bank_Branch" value="NIL" />
+                </div>
+
+                <div class="field">
+                    <label>Account Number</label>
+                    <input asp-for="Account_Number" />
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit">Save</button>
+                    <a asp-controller="Account" asp-action="Dashboard" class="btn-dashboard" style="background:#6c757d; color:white; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold;">Back to Dashboard</a>
+                </div>
+
+            </form>
+
+            @if (ViewBag.Message != null)
+            {
+                <p class="success">@ViewBag.Message</p>
+            }
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p class="error">@ViewBag.ErrorMessage</p>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+    @section Scripts {
+        <script>
+            window.onload = function () {
+                const gradeLevel = document.getElementById("GradeLevel");
+
+                if (gradeLevel) {
+                    gradeLevel.addEventListener("change", function () {
+                        let selectedGrade = this.value;
+
+                        if (typeof salaryStructure !== 'undefined') {
+                            let data = salaryStructure[selectedGrade];
+
+                            if (data) {
+                                document.getElementById("Consolidated").value = data.Consolidated;
+                                document.getElementById("Allowance").value = data.Allowance;
+                                document.getElementById("TeachingAllowance").value = data.TeachingAllowance;
+                                document.getElementById("SpecialistAllowance").value = data.SpecialistAllowance;
+                                document.getElementById("RoralPostingAllowance").value = data.RuralPostingAllowance;
+                                document.getElementById("HazardAllowance").value = data.HazardAllowance;
+                            }
+                        }
+                    });
+                }
+
+                var field = "@ViewBag.ErrorField";
+
+                if (field === "StaffID") {
+                    document.getElementById("StaffID").focus();
+                }
+
+                if (field === "FileNo") {
+                    document.getElementById("FileNo").focus();
+                }
+            };
+        </script>
+    }
+
+</body>
+</html>

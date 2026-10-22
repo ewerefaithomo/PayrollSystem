@@ -1,0 +1,268 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <title>
+        UBTH Payroll Portal - Login
+    </title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(to right, #f4fff7, #e8f5ec);
+            height: 100vh;
+        }
+
+        /* =======================================
+                   HEADER
+                ======================================= */
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 80px;
+                height: 80px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* =======================================
+                   LOGIN CONTAINER
+                ======================================= */
+
+        .login-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 60px;
+        }
+
+        .login-card {
+            width: 400px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            border-top: 6px solid #0b7a43;
+        }
+
+            .login-card h2 {
+                text-align: center;
+                color: #0b7a43;
+                margin-bottom: 30px;
+            }
+
+        /* =======================================
+                   INPUT FIELDS
+                ======================================= */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                font-weight: bold;
+                color: #1e3d2f;
+                display: block;
+                margin-bottom: 8px;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cfd8d3;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #0b7a43;
+                box-shadow: 0 0 5px rgba(11,122,67,0.3);
+            }
+
+        /* =======================================
+                   BUTTON
+                ======================================= */
+
+        .login-btn {
+            width: 100%;
+            background-color: #0b7a43;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+            .login-btn:hover {
+                background-color: #095d33;
+            }
+
+        /* =======================================
+                   MESSAGE
+                ======================================= */
+
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            color: red;
+            font-weight: bold;
+        }
+
+        /* =======================================
+                   FOOTER
+                ======================================= */
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 14px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =======================================
+         HEADER
+    ======================================== -->
+
+    <div class="header">
+
+        <img src="~/images/UBTH LOGO.jpeg"
+             alt="UBTH Logo" />
+
+        <div class="header-text">
+
+            <h1>
+                University of Benin Teaching Hospital
+            </h1>
+
+            <p>
+                Payroll Portal Management System
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- =======================================
+         LOGIN SECTION
+    ======================================== -->
+
+    <div class="login-container">
+
+        <div class="login-card">
+
+            <h2>
+                Staff Login
+            </h2>
+
+            <form method="post">
+
+                <div class="form-group">
+
+                    <label>
+                        Username
+                    </label>
+
+                    <input name="username"
+                           class="form-control"
+                           placeholder="Enter Username"
+                           required />
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input name="password"
+                           type="password"
+                           class="form-control"
+                           placeholder="Enter Password"
+                           required />
+
+                </div>
+
+                <button type="submit"
+                        class="login-btn">
+
+                    Login
+
+                </button>
+
+            </form>
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="message">
+
+                    @ViewBag.Message
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- =======================================
+         FOOTER
+    ======================================== -->
+
+    <div class="footer">
+
+        UNIVERSITY OF BENIN TEACHING HOSPITAL
+        &copy; @DateTime.Now.Year
+        Payroll Management System
+
+    </div>
+
+</body>
+
+</html>

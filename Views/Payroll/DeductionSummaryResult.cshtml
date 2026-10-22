@@ -1,0 +1,322 @@
+﻿@model IEnumerable<PayrollSystem.Models.Payroll>
+@{
+    Layout = null;
+    string displayMonth = ViewBag.Month ?? "";
+    var displayYear = ViewBag.Year != null ? ViewBag.Year : "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deductions Summary</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 26px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* =========================================
+                   DOCUMENT TITLE SECTION
+                ========================================= */
+        .doc-title-container {
+            text-align: center;
+            margin: 25px 20px 15px 20px;
+        }
+
+            .doc-title-container h2 {
+                color: #0b7a43;
+                font-size: 18px;
+                margin: 0 0 5px 0;
+                text-transform: uppercase;
+            }
+
+            .doc-title-container h3 {
+                color: #333;
+                font-size: 15px;
+                margin: 0;
+                font-weight: normal;
+            }
+
+        /* =========================================
+                   TABLE CONTAINER & STYLING
+                ========================================= */
+        .table-container {
+            width: 98%;
+            margin: 0 auto 30px auto;
+            overflow-x: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-top: 6px solid #0b7a43;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        th, td {
+            border: 1px solid #cde6d6;
+            padding: 6px 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #e2f3e7;
+            color: #0b7a43;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fffb;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #d4ede0 !important;
+            color: #0b7a43;
+        }
+
+        /* =========================================
+                   ACTION BAR
+                ========================================= */
+        .action-bar-wrapper {
+            width: 98%;
+            margin: 0 auto 40px auto;
+            text-align: center;
+        }
+
+        .action-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            display: inline-block;
+        }
+
+        .btn-action {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0b7a43;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin: 0 5px;
+        }
+
+            .btn-action:hover {
+                background-color: #095d33;
+            }
+
+        .btn-dashboard {
+            background-color: #6c757d;
+        }
+
+            .btn-dashboard:hover {
+                background-color: #5a6268;
+            }
+
+        .hidden-pdf-link {
+            display: none;
+        }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+        .footer {
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 13px;
+        }
+
+        @@media print {
+            @@page {
+                size: landscape;
+            }
+
+            body {
+                background-color: white;
+            }
+
+            .table-container {
+                box-shadow: none;
+                padding: 0;
+                border-top: none;
+            }
+
+            .action-bar-wrapper {
+                display: none;
+            }
+
+            .footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         DOCUMENT TITLE
+    ========================================= -->
+    <div class="doc-title-container">
+        <h2>University of Benin Teaching Hospital, Benin City, Edo State, Nigeria</h2>
+        <h3>Deductions Summary for @displayMonth, @displayYear</h3>
+    </div>
+
+    <!-- =========================================
+         DATA TABLE
+    ========================================= -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Staff ID</th>
+                    <th>Full Name</th>
+                    <th>Staff Group</th>
+                    <th>Grade Level</th>
+                    <th>Refund</th>
+                    <th>Overpayment Deduction</th>
+                    <th>Pension</th>
+                    <th>Tax</th>
+                    <th>Tax Arrears</th>
+                    <th>AMLSN</th>
+                    <th>NMA Dues</th>
+                    <th>NMA Special Levy</th>
+                    <th>MEDCAN Dues</th>
+                    <th>ARD</th>
+                    <th>NARD</th>
+                    <th>Rent</th>
+                    <th>Rent Arrears</th>
+                    <th>Deductions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int sn = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(sn++)</td>
+                        <td>@item.StaffID</td>
+                        <td style="text-align: left;">@item.FullName</td>
+                        <td>@item.Staff_Group</td>
+                        <td>@item.GradeLevel</td>
+                        <td>@item.Refund.ToString("N2")</td>
+                        <td>@item.OverPaymentDeduction.ToString("N2")</td>
+                        <td>@item.Pension.ToString("N2")</td>
+                        <td>@item.Tax.ToString("N2")</td>
+                        <td>@item.TAX_ARREARS.ToString("N2")</td>
+                        <td>@item.AMLSN.ToString("N2")</td>
+                        <td>@item.NMA_DUES.ToString("N2")</td>
+                        <td>@item.NMA_SPECIAL_LEVY.ToString("N2")</td>
+                        <td>@item.MEDCAN_DUES.ToString("N2")</td>
+                        <td>@item.ARD.ToString("N2")</td>
+                        <td>@item.NARD.ToString("N2")</td>
+                        <td>@item.RENT.ToString("N2")</td>
+                        <td>@item.RENT_ARREARS.ToString("N2")</td>
+                        <td style="font-weight:bold;">@item.Deductions.ToString("N2")</td>
+                    </tr>
+                }
+                <tr class="total-row">
+                    <td colspan="5" style="text-align: right;">TOTAL</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalRefund ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalOverPaymentDeduction ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalPension ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalTax ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalTaxArrears ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalAMLSN ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalNmaDues ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalNmaSpecialLevy ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalMedcanDues ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalARD ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalNARD ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalRent ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalRentArrears ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalDeductions ?? 0)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- =========================================
+         ACTION BAR
+    ========================================= -->
+    <div class="action-bar-wrapper">
+        <div class="action-bar">
+            <button onclick="window.print()" class="btn-action">Print Summary</button>
+            <a asp-action="ExportDeductionSummaryPdf" asp-route-month="@ViewBag.Month" asp-route-year="@ViewBag.Year" class="hidden-pdf-link">Export PDF</a>
+            <a asp-action="ExportDeductionSummaryExcel" asp-route-month="@ViewBag.Month" asp-route-year="@ViewBag.Year" class="btn-action">Export Excel</a>
+            <a asp-controller="Account" asp-action="Dashboard" class="btn-action btn-dashboard">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

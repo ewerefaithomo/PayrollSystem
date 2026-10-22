@@ -1,0 +1,349 @@
+﻿@model IEnumerable<PayrollSystem.Models.Payroll>
+@{
+    Layout = null;
+    string displayMonth = ViewBag.Month ?? Model.FirstOrDefault()?.PaymentMonth?.ToUpper() ?? "";
+    var displayYear = ViewBag.Year != null && (int)ViewBag.Year > 0 ? ViewBag.Year : (Model.FirstOrDefault()?.PaymentYear.ToString() ?? "");
+    string descriptionText = $"UBTH {displayMonth} {displayYear} SALARY";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Net Pay Summary Output - UBTH Payroll Portal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+        }
+
+        /* =========================================
+                   HEADER (Matching Process Payroll Page)
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 28px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   CONTAINER & REPORT CARD
+                ========================================= */
+        .container {
+            padding: 30px 20px;
+        }
+
+        .report-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            border-top: 8px solid #0b7a43;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+            .report-header h2 {
+                color: #0b7a43;
+                margin: 0 0 5px 0;
+                font-size: 18px;
+                text-transform: uppercase;
+            }
+
+            .report-header h3 {
+                color: #4b6354;
+                margin: 0;
+                font-size: 14px;
+                text-transform: uppercase;
+                font-weight: normal;
+            }
+
+        /* =========================================
+                   TABLE STYLING
+                ========================================= */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            font-size: 12px;
+        }
+
+            .summary-table th {
+                background-color: #e2f3e7;
+                color: #0b7a43;
+                font-weight: bold;
+                padding: 10px 8px;
+                border: 1px solid #cde6d6;
+                text-transform: uppercase;
+                white-space: nowrap;
+            }
+
+            .summary-table td {
+                padding: 8px;
+                border: 1px solid #cde6d6;
+                color: #333;
+                white-space: nowrap;
+            }
+
+            .summary-table tbody tr:nth-child(even) {
+                background-color: #f9fffb;
+            }
+
+            .summary-table tbody tr:hover {
+                background-color: #edfcf1;
+            }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #d4ede0 !important;
+            border-top: 2px solid #0b7a43;
+        }
+
+            .total-row td {
+                color: #0b7a43;
+                border-bottom: 2px double #0b7a43;
+            }
+
+        /* =========================================
+                   ACTION BAR & BUTTONS
+                ========================================= */
+        .action-bar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+            border-top: 1px dashed #cde6d6;
+            padding-top: 20px;
+        }
+
+        .btn-action {
+            background-color: #0b7a43;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+            .btn-action:hover {
+                background-color: #095d33;
+                color: white;
+            }
+
+        .btn-excel {
+            background-color: #1e7145;
+        }
+
+            .btn-excel:hover {
+                background-color: #144b2e;
+            }
+
+        .btn-back {
+            background-color: #6c757d;
+        }
+
+            .btn-back:hover {
+                background-color: #5a6268;
+            }
+
+        .right-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+
+        /* =========================================
+                   PRINT MEDIA OPTIMIZATION
+                ========================================= */
+        @@media print {
+            body {
+                background-color: white;
+                font-size: 9px;
+                margin: 0;
+            }
+
+            .header, .action-bar, .footer {
+                display: none !important;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .report-card {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                max-width: 100%;
+            }
+
+            .summary-table th {
+                background-color: #d9d9d9 !important;
+                color: black !important;
+                border: 1px solid #000 !important;
+            }
+
+            .summary-table td {
+                border: 1px solid #000 !important;
+                padding: 4px;
+            }
+
+            .total-row {
+                background-color: #f2f2f2 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         CONTAINER & REPORT CARD
+    ========================================= -->
+    <div class="container">
+        <div class="report-card">
+
+            <div class="report-header">
+                <h2>UNIVERSITY OF BENIN TEACHING HOSPITAL, BENIN CITY, EDO STATE, NIGERIA</h2>
+                <h3>NET PAY SUMMARY FOR @displayMonth, @displayYear</h3>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 5%;">S/N</th>
+                            <th>Staff ID</th>
+                            <th>Full Name</th>
+                            <th>Staff Group</th>
+                            <th>Grade Level</th>
+                            <th>Description</th>
+                            <th class="text-right">Net Pay</th>
+                            <th>Bank Name</th>
+                            <th>Account Number</th>
+                            <th>Sort Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int sn = 1;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@(sn++)</td>
+                                <td>@item.StaffID</td>
+                                <td>@item.FullName</td>
+                                <td>@item.Staff_Group</td>
+                                <td>@item.GradeLevel</td>
+                                <td>@descriptionText</td>
+                                <td class="text-right" style="font-weight:bold;">@item.Net_Pay.ToString("N2")</td>
+                                <td>@item.Bank_Name</td>
+                                <td>@item.Account_Number</td>
+                                <td>@item.Sort_Code</td>
+                            </tr>
+                        }
+
+                        <!-- TOTAL ROW -->
+                        <tr class="total-row">
+                            <td colspan="6" class="text-center">TOTAL</td>
+                            <td class="text-right">@string.Format("{0:N2}", ViewBag.TotalNetPay ?? Model.Sum(x => x.Net_Pay))</td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ACTION BAR -->
+            <div class="action-bar">
+                <button onclick="window.print()" class="btn-action">Print Summary</button>
+
+                <a asp-action="ExportNetSummaryExcel"
+                   asp-route-month="@displayMonth"
+                   asp-route-year="@displayYear"
+                   class="btn-action btn-excel">Export Excel</a>
+
+                <div class="right-actions">
+                    <a asp-action="SearchNetSummary" class="btn-action btn-back">Change Parameters</a>
+                    <a asp-controller="Account" asp-action="Dashboard" class="btn-action btn-back">&larr; Dashboard</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

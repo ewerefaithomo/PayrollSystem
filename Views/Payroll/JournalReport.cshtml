@@ -1,0 +1,223 @@
+﻿@{
+    ViewData["Title"] = "Journal Report Summary";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UBTH Payroll Portal - Journal Report Selection</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                   HEADER (Matching Process Payroll Page)
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   MAIN CONTAINER & CARD STYLE
+                ========================================= */
+        .main-container {
+            width: 95%;
+            max-width: 650px;
+            margin: 50px auto;
+        }
+
+        .process-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-top: 8px solid #0b7a43;
+        }
+
+            .process-card h2 {
+                color: #0b7a43;
+                margin-top: 0;
+                margin-bottom: 25px;
+                font-size: 28px;
+                text-align: center;
+            }
+
+        /* =========================================
+                   FORM FIELDS & CONTROLS
+                ========================================= */
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #0b7a43;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c8d8cc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+            background-color: #faffff;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+            select:focus {
+                border-color: #0b7a43;
+            }
+
+        /* =========================================
+                   BUTTONS & NAVIGATION
+                ========================================= */
+        .button-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        .btn-process {
+            flex: 1;
+            padding: 14px 20px;
+            background-color: #0b7a43;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+            .btn-process:hover {
+                background-color: #095d33;
+            }
+
+        .btn-dashboard {
+            display: inline-block;
+            color: #555;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            transition: color 0.2s;
+            text-align: center;
+        }
+
+            .btn-dashboard:hover {
+                color: #0b7a43;
+            }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+    <div class="main-container">
+        <div class="process-card">
+            <h2>Payroll Journal Report</h2>
+
+            <form asp-action="GenerateJournalReport" method="post">
+                <div class="field">
+                    <label>Select Month</label>
+                    <select name="month" required>
+                        <option value="">-- Select Month --</option>
+                        @foreach (var month in ViewBag.Months)
+                        {
+                            <option value="@month.Value">@month.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Select Year</label>
+                    <select name="year" required>
+                        <option value="">-- Select Year --</option>
+                        @foreach (var year in ViewBag.Years)
+                        {
+                            <option value="@year.Value">@year.Text</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-process">Generate Report</button>
+                    <a asp-controller="Account" asp-action="Dashboard" class="btn-dashboard">&larr; Back to Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

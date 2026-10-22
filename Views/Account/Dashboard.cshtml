@@ -1,0 +1,272 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>University of Benin Teaching Hospital Payroll Portal</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f8f4;
+            color: #1e3d2f;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+            .header-left img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .portal-title {
+            color: #0b7a43;
+        }
+
+            .portal-title h1 {
+                margin: 0;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .portal-title p {
+                margin: 5px 0 0 0;
+                font-size: 14px;
+                color: #4b6354;
+            }
+
+        .welcome-box {
+            text-align: right;
+            color: #0b7a43;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            background-color: #b82c2c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+            .btn-logout:hover {
+                background-color: #912222;
+            }
+
+        .container {
+            width: 95%;
+            margin: 30px auto;
+        }
+
+        .welcome-card {
+            background-color: white;
+            padding: 25px;
+            border-left: 6px solid #0b7a43;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+            .welcome-card h2 {
+                margin-top: 0;
+                color: #0b7a43;
+            }
+
+            .welcome-card p {
+                font-size: 16px;
+                color: #555;
+            }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: 0.3s ease;
+            border-top: 5px solid #0b7a43;
+        }
+
+            .menu-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+            }
+
+            .menu-card a {
+                text-decoration: none;
+                color: #0b7a43;
+                font-size: 18px;
+                font-weight: bold;
+                display: block;
+            }
+
+            .menu-card p {
+                margin-top: 10px;
+                color: #666;
+                font-size: 14px;
+            }
+
+        .footer {
+            margin-top: 40px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+            <div class="portal-title">
+                <h1>University of Benin Teaching Hospital</h1>
+                <p>Payroll Portal Management System</p>
+            </div>
+        </div>
+
+        <div class="welcome-box">
+            <div>Welcome, <strong>@ViewBag.Username</strong></div>
+            <a asp-controller="Account" asp-action="Logout" class="btn-logout">Log Out</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h2>Dashboard</h2>
+            <p>
+                Welcome to the UBTH Payroll Management Portal.
+                Use the menu below to manage staff payroll,
+                generate payslips, process salaries,
+                and monitor payroll activities.
+            </p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="menu-card">
+                <a asp-controller="Staff" asp-action="Create">Add New Staff</a>
+                <p>Register new staff payroll details</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="Update">Update Staff Pay Record</a>
+                <p>Modify and update payroll records</p>
+            </div>
+
+            
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="CreateMonth" onclick="return confirm('Are you sure you want to Create New Month Payroll?');">Create New Month Payroll</a>
+                <p>Generate payroll for a new month</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="Process">Process Payroll</a>
+                <p>Process and compute salary payments</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="Payslip">Print Pay Slip</a>
+                <p>Generate and print staff payslips</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="Summary">Print Pay Summary</a>
+                <p>View and print payroll summaries</p>
+            </div>
+
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="EarningsSummary">Earnings Summary</a>
+                <p>View and print earnings summaries</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="DeductionSummary">Deduction Summary</a>
+                <p>View and print deduction summaries</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="NetSummary">Net Pay Summary</a>
+                <p>View and print net pay summaries</p>
+            </div>
+
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="JournalReport">Journal Report</a>
+                <p>Generate payroll journal reports</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="BankReport">Bank Report</a>
+                <p>Generate bank payment reports</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="Deactivate">Delete Staff Record</a>
+                <p>Remove staff from current payroll</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="MultipleDeactivate">Multiple De-Activation</a>
+                <p>De-Activate multiple staff payroll records</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="Activate">Payroll Activation</a>
+                <p>Activate multiple staff payroll records</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Payroll" asp-action="AddDeduction">Add Deductions</a>
+                <p>Upload and apply payroll deductions to multiple staff records.</p>
+            </div>
+
+            <div class="menu-card">
+                <a asp-controller="Audit" asp-action="Index">Audit Trail</a>
+                <p>Monitor payroll system activities</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

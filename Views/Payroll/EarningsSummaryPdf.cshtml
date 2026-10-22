@@ -1,0 +1,322 @@
+﻿@model IEnumerable<PayrollSystem.Models.Payroll>
+@{
+    Layout = null;
+    string displayMonth = ViewBag.Month ?? "";
+    var displayYear = ViewBag.Year != null ? ViewBag.Year : "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Earnings Summary</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 26px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* =========================================
+                   DOCUMENT TITLE SECTION
+                ========================================= */
+        .doc-title-container {
+            text-align: center;
+            margin: 25px 20px 15px 20px;
+        }
+
+            .doc-title-container h2 {
+                color: #0b7a43;
+                font-size: 18px;
+                margin: 0 0 5px 0;
+                text-transform: uppercase;
+            }
+
+            .doc-title-container h3 {
+                color: #333;
+                font-size: 15px;
+                margin: 0;
+                font-weight: normal;
+            }
+
+        /* =========================================
+                   TABLE CONTAINER & STYLING
+                ========================================= */
+        .table-container {
+            width: 98%;
+            margin: 0 auto 30px auto;
+            overflow-x: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-top: 6px solid #0b7a43;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+        }
+
+        th, td {
+            border: 1px solid #cde6d6;
+            padding: 5px 7px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #e2f3e7;
+            color: #0b7a43;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fffb;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #d4ede0 !important;
+            color: #0b7a43;
+        }
+
+        /* =========================================
+                   ACTION BAR
+                ========================================= */
+        .action-bar-wrapper {
+            width: 98%;
+            margin: 0 auto 40px auto;
+            text-align: center;
+        }
+
+        .action-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            display: inline-block;
+        }
+
+        .btn-action {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0b7a43;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin: 0 5px;
+        }
+
+            .btn-action:hover {
+                background-color: #095d33;
+            }
+
+        .btn-dashboard {
+            background-color: #6c757d;
+        }
+
+            .btn-dashboard:hover {
+                background-color: #5a6268;
+            }
+
+        .hidden-pdf-link {
+            display: none;
+        }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+        .footer {
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 13px;
+        }
+
+        @@media print {
+            @@page {
+                size: landscape;
+            }
+
+            body {
+                background-color: white;
+            }
+
+            .table-container {
+                box-shadow: none;
+                padding: 0;
+                border-top: none;
+            }
+
+            .action-bar-wrapper {
+                display: none;
+            }
+
+            .footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         DOCUMENT TITLE
+    ========================================= -->
+    <div class="doc-title-container">
+        <h2>University of Benin Teaching Hospital, Benin City, Edo State, Nigeria</h2>
+        <h3>Earnings Summary for @displayMonth, @displayYear</h3>
+    </div>
+
+    <!-- =========================================
+         DATA TABLE
+    ========================================= -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Staff ID</th>
+                    <th>Full Name</th>
+                    <th>Staff Group</th>
+                    <th>Grade Level</th>
+                    <th>Consolidated</th>
+                    <th>Allowance</th>
+                    <th>Teaching Allowance</th>
+                    <th>Call Duty Allowance</th>
+                    <th>Hazard Allowance</th>
+                    <th>Shift Allowance</th>
+                    <th>Specialist Allowance</th>
+                    <th>Rural Posting Allowance</th>
+                    <th>Accoutrement Allowance</th>
+                    <th>Conmess Clinical Duty</th>
+                    <th>Conmess Non-Clinical</th>
+                    <th>Pharmacist Consult</th>
+                    <th>Arrears</th>
+                    <th>Gross Pay</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int sn = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(sn++)</td>
+                        <td>@item.StaffID</td>
+                        <td style="text-align: left;">@item.FullName</td>
+                        <td>@item.Staff_Group</td>
+                        <td>@item.GradeLevel</td>
+                        <td>@item.Consolidated.ToString("N2")</td>
+                        <td>@item.Allowance.ToString("N2")</td>
+                        <td>@item.TeachingAllowance.ToString("N2")</td>
+                        <td>@item.CallDutyAllowance.ToString("N2")</td>
+                        <td>@item.HazardAllowance.ToString("N2")</td>
+                        <td>@item.ShiftAllowance.ToString("N2")</td>
+                        <td>@item.SpecialistAllowance.ToString("N2")</td>
+                        <td>@item.RuralPostingAllowance.ToString("N2")</td>
+                        <td>@item.AccoutrementAllowance.ToString("N2")</td>
+                        <td>@item.ConmessClinicalDutyAllowance.ToString("N2")</td>
+                        <td>@item.ConmessNonClinicalAllowance.ToString("N2")</td>
+                        <td>@item.PharmacistConsultAllowance.ToString("N2")</td>
+                        <td>@item.Arrears.ToString("N2")</td>
+                        <td style="font-weight:bold;">@item.Gross_Pay.ToString("N2")</td>
+                    </tr>
+                }
+                <tr class="total-row">
+                    <td colspan="5" style="text-align: right;">TOTAL</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalConsolidated ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalTeachingAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalCallDutyAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalHazardAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalShiftAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalSpecialistAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalRuralPostingAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalAccoutrementAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalConmessClinicalDutyAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalConmessNonClinicalAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalPharmacistConsultAllowance ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalArrears ?? 0)</td>
+                    <td>@string.Format("{0:N2}", ViewBag.TotalGrossPay ?? 0)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- =========================================
+         ACTION BAR
+    ========================================= -->
+    <div class="action-bar-wrapper">
+        <div class="action-bar">
+            <button onclick="window.print()" class="btn-action">Print Summary</button>
+            <a asp-action="ExportEarningsSummaryPdf" asp-route-month="@ViewBag.Month" asp-route-year="@ViewBag.Year" class="hidden-pdf-link">Export PDF</a>
+            <a asp-action="ExportEarningsSummaryExcel" asp-route-month="@ViewBag.Month" asp-route-year="@ViewBag.Year" class="btn-action">Export Excel</a>
+            <a asp-controller="Account" asp-action="Dashboard" class="btn-action btn-dashboard">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

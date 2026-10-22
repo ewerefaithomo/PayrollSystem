@@ -1,0 +1,223 @@
+﻿@model PayrollSystem.Models.BankReportViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Bank Report PDF";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bank Report PDF</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   MAIN CONTENT
+                ========================================= */
+        .main-container {
+            width: 95%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        .report-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-top: 8px solid #0b7a43;
+        }
+
+            .report-card h2 {
+                color: #0b7a43;
+                text-align: center;
+                margin-top: 0;
+                margin-bottom: 5px;
+                font-size: 26px;
+            }
+
+            .report-card h3 {
+                color: #555;
+                text-align: center;
+                margin-top: 0;
+                margin-bottom: 25px;
+                font-size: 18px;
+                font-weight: normal;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            border: 1px solid #cde6d6;
+            padding: 12px 10px;
+            background-color: #e2f3e7;
+            color: #0b7a43;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        td {
+            border: 1px solid #cde6d6;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #f2f8f4;
+            color: #0b7a43;
+        }
+
+        .dashboard-nav {
+            margin-top: 30px;
+        }
+
+        .btn-dashboard {
+            display: inline-block;
+            color: #555;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+            .btn-dashboard:hover {
+                color: #0b7a43;
+            }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+    <div class="main-container">
+        <div class="report-card">
+            <h2>UNIVERSITY OF BENIN TEACHING HOSPITAL</h2>
+            <h3>BANK PAYMENT SUMMARY FOR THE MONTH OF @Model.Month - @Model.Year</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>BANK CODE</th>
+                        <th>BANK NAME</th>
+                        <th>BRANCH</th>
+                        <th>NET PAY</th>
+                        <th>NO OF STAFF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.BankLines != null)
+                    {
+                        @foreach (var item in Model.BankLines)
+                        {
+                            <tr>
+                                <td class="center">@item.SN</td>
+                                <td class="center">@item.BankCode</td>
+                                <td>@item.BankName</td>
+                                <td class="center">@item.Branch</td>
+                                <td class="right">@item.NetPay.ToString("N2")</td>
+                                <td class="center">@item.NoOfStaff</td>
+                            </tr>
+                        }
+                    }
+
+                    <tr class="total-row">
+                        <td colspan="4" class="center">TOTAL</td>
+                        <td class="right">@Model.TotalNetPay.ToString("N2")</td>
+                        <td class="center">@Model.TotalStaff</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="dashboard-nav">
+                <a asp-controller="Account" asp-action="Dashboard" class="btn-dashboard">&larr; Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

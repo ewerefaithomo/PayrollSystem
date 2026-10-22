@@ -1,0 +1,159 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>UBTH Payroll Portal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(to right, #f4fff7, #e8f5ec);
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 32px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .hero-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 80px;
+            padding: 20px;
+        }
+
+        .hero-card {
+            background-color: white;
+            width: 650px;
+            padding: 50px;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            border-top: 7px solid #0b7a43;
+        }
+
+            .hero-card h2 {
+                color: #0b7a43;
+                font-size: 36px;
+                margin-bottom: 20px;
+            }
+
+            .hero-card p {
+                font-size: 17px;
+                color: #555;
+                line-height: 1.7;
+                margin-bottom: 35px;
+            }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 14px 35px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn-login {
+            background-color: #0b7a43;
+            color: white;
+        }
+
+            .btn-login:hover {
+                background-color: #095d33;
+            }
+
+        .btn-signup {
+            background-color: white;
+            color: #0b7a43;
+            border: 2px solid #0b7a43;
+        }
+
+            .btn-signup:hover {
+                background-color: #0b7a43;
+                color: white;
+            }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 14px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <div class="hero-card">
+            <h2>Welcome to Payroll System</h2>
+            <p>
+                Welcome to the official University of Benin
+                Teaching Hospital Payroll Management Portal.
+                This platform enables secure payroll processing,
+                staff payment administration, payslip generation,
+                payroll summaries, and payroll auditing.
+            </p>
+
+            <div class="button-group">
+                <a href="/Account/Login" class="btn btn-login">Login</a>
+                <!-- CHANGED LINK PATH BELOW TO POINT TO ACCESS CODE VERIFICATION -->
+                <a href="/Account/VerifyAccessCode" class="btn btn-signup">Signup</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>

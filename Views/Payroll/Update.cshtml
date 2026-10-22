@@ -1,0 +1,240 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Update Staff Pay Record";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Staff Pay Record - UBTH Payroll</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f8f4;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =========================================
+                   HEADER
+                ========================================= */
+
+        .header {
+            background-color: white;
+            border-bottom: 5px solid #0b7a43;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+            .header img {
+                width: 85px;
+                height: 85px;
+                object-fit: contain;
+                margin-right: 20px;
+            }
+
+        .header-text h1 {
+            margin: 0;
+            color: #0b7a43;
+            font-size: 30px;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* =========================================
+                   MAIN CONTENT
+                ========================================= */
+
+        .main-container {
+            width: 95%;
+            max-width: 700px;
+            margin: 50px auto;
+        }
+
+        .process-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-top: 8px solid #0b7a43;
+            text-align: center;
+        }
+
+            .process-card h2 {
+                color: #0b7a43;
+                margin-top: 0;
+                margin-bottom: 15px;
+                font-size: 32px;
+            }
+
+            .process-card p {
+                color: #666;
+                margin-bottom: 30px;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+
+        /* =========================================
+                   FORM STYLING
+                ========================================= */
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                font-weight: bold;
+                color: #0b7a43;
+                font-size: 14px;
+                display: block;
+                margin-bottom: 8px;
+            }
+
+            .form-group input[type="text"] {
+                width: 100%;
+                padding: 12px 14px;
+                border: 1px solid #c8d8cc;
+                border-radius: 8px;
+                outline: none;
+                box-sizing: border-box;
+                font-size: 15px;
+                background-color: #fafafa;
+            }
+
+                .form-group input[type="text"]:focus {
+                    border-color: #0b7a43;
+                    background-color: #fff;
+                }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button[type="submit"] {
+            background-color: #0b7a43;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s ease;
+        }
+
+            button[type="submit"]:hover {
+                background-color: #095d33;
+            }
+
+        .btn-dashboard {
+            background-color: #6c757d;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+            .btn-dashboard:hover {
+                background-color: #5a6268;
+            }
+
+        .message {
+            margin-top: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #c62828;
+        }
+
+        /* =========================================
+                   FOOTER
+                ========================================= */
+
+        .footer {
+            margin-top: 60px;
+            background-color: #0b7a43;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <div class="header">
+        <img src="~/images/UBTH LOGO.jpeg" alt="UBTH Logo" />
+        <div class="header-text">
+            <h1>University of Benin Teaching Hospital</h1>
+            <p>Payroll Portal Management System</p>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+
+    <div class="main-container">
+        <div class="process-card">
+            <h2>Update Staff Pay Record</h2>
+            <p>Enter the Staff ID below to search and modify the staff payroll record.</p>
+
+            <form asp-action="SearchStaff" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label>Enter Staff ID</label>
+                    <input type="text" name="staffId" placeholder="Type Staff ID here..." required />
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit">Search</button>
+                    <a asp-controller="Account" asp-action="Dashboard" class="btn-dashboard">Back to Dashboard</a>
+                </div>
+            </form>
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="message">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+            @if (ViewBag.Message != null)
+            {
+                <div class="message" style="color: #0b7a43;">
+                    @ViewBag.Message
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <div class="footer">
+        UNIVERSITY OF BENIN TEACHING HOSPITAL &copy; @DateTime.Now.Year Payroll Management System
+    </div>
+
+</body>
+</html>
